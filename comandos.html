@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comandos CCS Night - Sistema Completo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -58,23 +59,23 @@
         /* Header */
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 20px;
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 2px solid rgba(138, 43, 226, 0.3);
         }
 
         header h1 {
-            font-size: 3em;
+            font-size: 1.8em;
             background: linear-gradient(45deg, #8a2be2, #00bfff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         header p {
             color: #888;
-            font-size: 1.2em;
+            font-size: 0.85em;
         }
 
         /* Dock Navigation */
@@ -84,7 +85,7 @@
             z-index: 1000;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            padding: 12px 10px;
             background: rgba(10, 10, 15, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(138, 43, 226, 0.2);
@@ -92,27 +93,38 @@
 
         .dock {
             display: flex;
-            gap: 15px;
-            padding: 15px 30px;
+            gap: 8px;
+            padding: 10px 15px;
             background: rgba(26, 26, 46, 0.6);
-            border-radius: 25px;
+            border-radius: 20px;
             border: 1px solid rgba(138, 43, 226, 0.3);
             box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2);
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .dock-button {
-            padding: 12px 24px;
+            padding: 8px 14px;
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 191, 255, 0.2));
             border: 1px solid rgba(138, 43, 226, 0.4);
-            border-radius: 15px;
+            border-radius: 12px;
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             position: relative;
             overflow: hidden;
+            font-size: 0.85em;
+        }
+
+        .dock-button.active {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(0, 191, 255, 0.6));
+            border-color: rgba(138, 43, 226, 0.8);
+            transform: translateY(-2px);
         }
 
         .dock-button::before {
@@ -134,9 +146,14 @@
         }
 
         .dock-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 24px rgba(138, 43, 226, 0.4);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
             border-color: rgba(138, 43, 226, 0.8);
+        }
+
+        .dock-button i {
+            position: relative;
+            z-index: 1;
         }
 
         .dock-button span {
@@ -146,23 +163,30 @@
 
         /* Main Container */
         .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 1600px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+
+        /* Tab Content Sections */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Electric Border Cards */
         .command-section {
-            margin-bottom: 60px;
             position: relative;
-            scroll-margin-top: 100px;
         }
 
         .electric-card {
             position: relative;
             background: rgba(26, 26, 46, 0.6);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 16px;
+            padding: 20px;
             backdrop-filter: blur(10px);
             overflow: hidden;
         }
@@ -176,7 +200,7 @@
             bottom: -2px;
             background: linear-gradient(45deg, #8a2be2, #00bfff, #8a2be2, #00bfff);
             background-size: 400% 400%;
-            border-radius: 20px;
+            border-radius: 16px;
             z-index: -1;
             animation: electricBorder 3s ease infinite;
             opacity: 0.6;
@@ -189,72 +213,82 @@
         }
 
         .section-title {
-            font-size: 2.5em;
-            margin-bottom: 30px;
+            font-size: 1.5em;
+            margin-bottom: 15px;
             background: linear-gradient(45deg, #8a2be2, #00bfff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .section-subtitle {
-            font-size: 1.3em;
+            font-size: 1em;
             color: #00bfff;
-            margin: 25px 0 15px 0;
-            padding-bottom: 10px;
+            margin: 15px 0 10px 0;
+            padding-bottom: 6px;
             border-bottom: 2px solid rgba(138, 43, 226, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .command-list {
             display: grid;
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
         }
 
         .command-item {
             background: rgba(10, 10, 15, 0.6);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #8a2be2;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border-left: 3px solid #8a2be2;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
         }
 
         .command-item:hover {
-            transform: translateX(10px);
+            transform: translateX(8px);
             background: rgba(138, 43, 226, 0.1);
             border-left-color: #00bfff;
-            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.3);
+            box-shadow: 0 4px 16px rgba(138, 43, 226, 0.3);
         }
 
         .command-name {
             color: #00bfff;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 0.95em;
             font-family: 'Courier New', monospace;
         }
 
         .command-description {
             color: #b0b0b0;
-            margin-top: 8px;
-            line-height: 1.6;
+            margin-top: 4px;
+            line-height: 1.4;
+            font-size: 0.88em;
         }
 
         /* Info Boxes */
         .info-box {
             background: rgba(138, 43, 226, 0.1);
             border: 1px solid rgba(138, 43, 226, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 12px 0;
         }
 
         .info-title {
             color: #8a2be2;
             font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 15px;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .info-list {
@@ -263,9 +297,10 @@
         }
 
         .info-list li {
-            padding: 8px 0;
+            padding: 5px 0;
             border-bottom: 1px solid rgba(138, 43, 226, 0.2);
             color: #c0c0c0;
+            font-size: 0.9em;
         }
 
         .info-list li:last-child {
@@ -294,19 +329,20 @@
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px;
+            padding: 25px;
             background: rgba(10, 10, 15, 0.8);
             border-top: 2px solid rgba(138, 43, 226, 0.3);
-            margin-top: 60px;
+            margin-top: 25px;
         }
 
         footer p {
             color: #888;
+            font-size: 0.9em;
         }
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
@@ -315,35 +351,200 @@
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(45deg, #8a2be2, #00bfff);
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, #00bfff, #8a2be2);
         }
 
+        /* Botón Ver Leyes */
+        .btn-leyes {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #1e90ff, #00bfff);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9em;
+            box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-leyes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.6);
+        }
+
+        /* Search Box */
+        .search-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .search-input {
+            padding: 10px 16px 10px 40px;
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 20px;
+            background: rgba(26, 26, 46, 0.9);
+            color: #fff;
+            font-size: 0.9em;
+            outline: none;
+            width: 220px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: rgba(138, 43, 226, 1);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            width: 280px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8a2be2;
+            pointer-events: none;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(0, 191, 255, 0.8));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.8);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header h1 {
-                font-size: 2em;
+                font-size: 1.3em;
+            }
+
+            header p {
+                font-size: 0.75em;
             }
 
             .dock {
-                flex-wrap: wrap;
-                gap: 10px;
+                gap: 5px;
+                padding: 8px 10px;
             }
 
             .dock-button {
-                padding: 8px 16px;
-                font-size: 0.9em;
+                padding: 6px 10px;
+                font-size: 0.75em;
+                gap: 4px;
             }
 
             .section-title {
-                font-size: 1.8em;
+                font-size: 1.2em;
+            }
+
+            .section-subtitle {
+                font-size: 0.95em;
             }
 
             .electric-card {
-                padding: 20px;
+                padding: 15px;
+            }
+
+            .command-list {
+                grid-template-columns: 1fr;
+            }
+
+            .command-item {
+                padding: 8px 10px;
+            }
+
+            .command-name {
+                font-size: 0.88em;
+            }
+
+            .command-description {
+                font-size: 0.82em;
+            }
+
+            .btn-leyes {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 0.8em;
+            }
+
+            .search-container {
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .search-input {
+                width: 180px;
+                font-size: 0.85em;
+                padding: 8px 12px 8px 35px;
+            }
+
+            .search-input:focus {
+                width: 220px;
+            }
+
+            .scroll-top {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+                bottom: 15px;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 1.1em;
+            }
+
+            .dock-container {
+                padding: 8px 5px;
+            }
+
+            .command-list {
+                gap: 8px;
             }
         }
     </style>
@@ -352,1645 +553,1175 @@
     <div class="liquid-background"></div>
 
     <header>
-        <h1>🎮 Sistema de Comandos CCS Night</h1>
+        <h1><i class="fas fa-gamepad"></i> Sistema de Comandos CCS Night</h1>
         <p>Guía completa de comandos administrativos y de jugador</p>
     </header>
 
+    <a href="index.html" class="btn-leyes">
+        <i class="fas fa-book"></i>
+        <span>Ver Leyes</span>
+    </a>
+
     <div class="dock-container">
         <div class="dock">
-            <a href="#jugadores" class="dock-button"><span>👤 Jugadores</span></a>
-            <a href="#vip" class="dock-button"><span>⭐ VIP</span></a>
-            <a href="#admin1" class="dock-button"><span>🛡️ Admin 1</span></a>
-            <a href="#admin2" class="dock-button"><span>🛡️ Admin 2</span></a>
-            <a href="#admin3" class="dock-button"><span>🛡️ Admin 3</span></a>
-            <a href="#admin4" class="dock-button"><span>🛡️ Admin 4</span></a>
-            <a href="#admin5" class="dock-button"><span>🛡️ Admin 5</span></a>
-            <a href="#admin9" class="dock-button"><span>👑 Dev</span></a>
-            <a href="#fracciones" class="dock-button"><span>🚔 Fracciones</span></a>
-            <a href="#info" class="dock-button"><span>ℹ️ Info</span></a>
+            <button class="dock-button active" data-tab="jugadores">
+                <i class="fas fa-user"></i>
+                <span>Jugadores</span>
+            </button>
+            <button class="dock-button" data-tab="vip">
+                <i class="fas fa-star"></i>
+                <span>VIP</span>
+            </button>
+            <button class="dock-button" data-tab="admin1">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin 1</span>
+            </button>
+            <button class="dock-button" data-tab="admin2">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin 2</span>
+            </button>
+            <button class="dock-button" data-tab="admin3">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin 3</span>
+            </button>
+            <button class="dock-button" data-tab="admin4">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin 4</span>
+            </button>
+            <button class="dock-button" data-tab="admin5">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin 5</span>
+            </button>
+            <button class="dock-button" data-tab="admin9">
+                <i class="fas fa-crown"></i>
+                <span>Dev</span>
+            </button>
+            <button class="dock-button" data-tab="fracciones">
+                <i class="fas fa-users"></i>
+                <span>Fracciones</span>
+            </button>
+            <button class="dock-button" data-tab="info">
+                <i class="fas fa-info-circle"></i>
+                <span>Info</span>
+            </button>
         </div>
     </div>
 
     <div class="container">
 
         <!-- COMANDOS DE JUGADORES -->
-        <section id="jugadores" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">👤 Comandos de Jugadores (Nivel 0)</h2>
-                
-                <h3 class="section-subtitle">🎯 Comandos Básicos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/time</div>
-                        <div class="command-description">Verificar tiempo restante de arresto/demorgan/warns</div>
+        <div id="jugadores" class="tab-content active">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i>
+                        Comandos de Jugadores (Nivel 0)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-bullseye"></i>
+                        Comandos Básicos
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/time</div>
+                            <div class="command-description">Verificar tiempo restante de arresto/demorgan/warns</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/q</div>
+                            <div class="command-description">Desconectarse del servidor de forma segura</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/report [mensaje]</div>
+                            <div class="command-description">Enviar reporte a administradores (5-150 caracteres)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/forget</div>
+                            <div class="command-description">Olvidar a todos los amigos (requiere confirmación)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/fjob</div>
+                            <div class="command-description">Dejar trabajo actual</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/leaders</div>
+                            <div class="command-description">Ver líderes de fracciones en línea</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/code [código]</div>
+                            <div class="command-description">Crear código de referencia (cuesta 228 RB, nivel 3+)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/action [mensaje]</div>
+                            <div class="command-description">Crear acción visible (máx 60 caracteres, nivel 3+)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delaction</div>
+                            <div class="command-description">Eliminar tu acción creada</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/password [nueva]</div>
+                            <div class="command-description">Cambiar contraseña de la cuenta</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/q</div>
-                        <div class="command-description">Desconectarse del servidor de forma segura</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/report [mensaje]</div>
-                        <div class="command-description">Enviar reporte a administradores (5-150 caracteres)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/forget</div>
-                        <div class="command-description">Olvidar a todos los amigos (requiere confirmación)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/fjob</div>
-                        <div class="command-description">Dejar trabajo actual</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/leaders</div>
-                        <div class="command-description">Ver líderes de fracciones en línea</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/code [código]</div>
-                        <div class="command-description">Crear código de referencia (cuesta 228 RB, nivel 3+)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/action [mensaje]</div>
-                        <div class="command-description">Crear acción visible (máx 60 caracteres, nivel 3+)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delaction</div>
-                        <div class="command-description">Eliminar tu acción creada</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/password [nueva]</div>
-                        <div class="command-description">Cambiar contraseña de la cuenta</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">💬 Chat Roleplay</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/me [mensaje]</div>
-                        <div class="command-description">Acción en primera persona (radio 10m)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-comments"></i>
+                        Chat Roleplay
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/me [mensaje]</div>
+                            <div class="command-description">Acción en primera persona (radio 10m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/do [mensaje]</div>
+                            <div class="command-description">Descripción del entorno (radio 10m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/todo [mensaje*acción]</div>
+                            <div class="command-description">Combinación de diálogo y acción</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/w [id] [mensaje]</div>
+                            <div class="command-description">Susurrar a jugador cercano (radio 2m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/s [mensaje]</div>
+                            <div class="command-description">Gritar (radio 30m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/b [mensaje]</div>
+                            <div class="command-description">Chat OOC local (radio 10m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/try [mensaje]</div>
+                            <div class="command-description">Acción con resultado aleatorio (éxito/fallo)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/roll [num1] [num2]</div>
+                            <div class="command-description">Tirar dados entre dos números (0-65535)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/do [mensaje]</div>
-                        <div class="command-description">Descripción del entorno (radio 10m)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/todo [mensaje*acción]</div>
-                        <div class="command-description">Combinación de diálogo y acción</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/w [id] [mensaje]</div>
-                        <div class="command-description">Susurrar a jugador cercano (radio 2m)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/s [mensaje]</div>
-                        <div class="command-description">Gritar (radio 30m)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/b [mensaje]</div>
-                        <div class="command-description">Chat OOC local (radio 10m)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/try [mensaje]</div>
-                        <div class="command-description">Acción con resultado aleatorio (éxito/fallo)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/roll [num1] [num2]</div>
-                        <div class="command-description">Tirar dados entre dos números (0-65535)</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🎲 Interacciones</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/dice [id] [precio]</div>
-                        <div class="command-description">Jugar dados con otro jugador (solo casino, nivel 5+)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-dice"></i>
+                        Interacciones
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/dice [id] [precio]</div>
+                            <div class="command-description">Jugar dados con otro jugador (solo casino, nivel 5+)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/pmute [id]</div>
+                            <div class="command-description">Silenciar jugador localmente (tu cliente)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/punmute [id]</div>
+                            <div class="command-description">Desilenciar jugador localmente</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/eject [id]</div>
+                            <div class="command-description">Expulsar jugador de tu vehículo (como conductor)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/ic [id]</div>
+                            <div class="command-description">Meter jugador en vehículo cercano</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/pmute [id]</div>
-                        <div class="command-description">Silenciar jugador localmente (tu cliente)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/punmute [id]</div>
-                        <div class="command-description">Desilenciar jugador localmente</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/eject [id]</div>
-                        <div class="command-description">Expulsar jugador de tu vehículo (como conductor)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ic [id]</div>
-                        <div class="command-description">Meter jugador en vehículo cercano</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🏢 Fracciones</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/f [mensaje]</div>
-                        <div class="command-description">Chat de fracción (IC)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-building"></i>
+                        Fracciones
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/f [mensaje]</div>
+                            <div class="command-description">Chat de fracción (IC)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/fb [mensaje]</div>
+                            <div class="command-description">Chat OOC de fracción</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/dep [mensaje]</div>
+                            <div class="command-description">Chat departamental gobierno</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/gov [mensaje]</div>
+                            <div class="command-description">Mensaje gubernamental público (requiere servicio)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/m [mensaje]</div>
+                            <div class="command-description">Megáfono (policía/army en vehículo, radio 120m)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/t [mensaje]</div>
+                            <div class="command-description">Radio camioneros (solo trabajo trucker)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/respawn</div>
+                            <div class="command-description">Respawnear vehículos de fracción vacíos</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/ticket [id] [monto] [razón]</div>
+                            <div class="command-description">Dar multa (fracciones gubernamentales)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/invite [id]</div>
+                            <div class="command-description">Invitar a fracción (líderes)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/uninvite [id]</div>
+                            <div class="command-description">Expulsar de fracción (líderes)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setrank [id] [rango]</div>
+                            <div class="command-description">Cambiar rango en fracción (líderes)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/leave</div>
+                            <div class="command-description">Salir de fracción/organización (VIP)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/fb [mensaje]</div>
-                        <div class="command-description">Chat OOC de fracción</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/dep [mensaje]</div>
-                        <div class="command-description">Chat departamental gobierno</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/gov [mensaje]</div>
-                        <div class="command-description">Mensaje gubernamental público (requiere servicio)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/m [mensaje]</div>
-                        <div class="command-description">Megáfono (policía/army en vehículo, radio 120m)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/t [mensaje]</div>
-                        <div class="command-description">Radio camioneros (solo trabajo trucker)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/respawn</div>
-                        <div class="command-description">Respawnear vehículos de fracción vacíos</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ticket [id] [monto] [razón]</div>
-                        <div class="command-description">Dar multa (fracciones gubernamentales)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/invite [id]</div>
-                        <div class="command-description">Invitar a fracción (líderes)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/uninvite [id]</div>
-                        <div class="command-description">Expulsar de fracción (líderes)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setrank [id] [rango]</div>
-                        <div class="command-description">Cambiar rango en fracción (líderes)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/leave</div>
-                        <div class="command-description">Salir de fracción/organización (VIP)</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">👨‍👩‍👧‍👦 Organizaciones/Familias</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/fc [mensaje]</div>
-                        <div class="command-description">Chat de organización (IC)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-user-friends"></i>
+                        Organizaciones/Familias
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/fc [mensaje]</div>
+                            <div class="command-description">Chat de organización (IC)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/fcb [mensaje]</div>
+                            <div class="command-description">Chat OOC de organización</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/finvite [id]</div>
+                            <div class="command-description">Invitar a organización</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/funinvite [id]</div>
+                            <div class="command-description">Expulsar de organización</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/fsetrank [id] [rango]</div>
+                            <div class="command-description">Cambiar rango en organización</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/fcb [mensaje]</div>
-                        <div class="command-description">Chat OOC de organización</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/finvite [id]</div>
-                        <div class="command-description">Invitar a organización</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/funinvite [id]</div>
-                        <div class="command-description">Expulsar de organización</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/fsetrank [id] [rango]</div>
-                        <div class="command-description">Cambiar rango en organización</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🏪 Negocios</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/buybiz</div>
-                        <div class="command-description">Comprar negocio (en marcador)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-store"></i>
+                        Negocios
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/buybiz</div>
+                            <div class="command-description">Comprar negocio (en marcador)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/sellbiz [id] [precio]</div>
+                            <div class="command-description">Vender negocio a jugador</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/sellbiz [id] [precio]</div>
-                        <div class="command-description">Vender negocio a jugador</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🚗 Vehículos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/mypoint</div>
-                        <div class="command-description">Mostrar punto de entrega (delivery)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-car"></i>
+                        Vehículos
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/mypoint</div>
+                            <div class="command-description">Mostrar punto de entrega (delivery)</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- COMANDOS VIP -->
-        <section id="vip" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">⭐ Comandos VIP</h2>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/cam</div>
-                        <div class="command-description">Activar cámara cinematográfica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/camtime [valor]</div>
-                        <div class="command-description">Ajustar tiempo de transición de cámara</div>
+        <div id="vip" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i>
+                        Comandos VIP
+                    </h2>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/cam</div>
+                            <div class="command-description">Activar cámara cinematográfica</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/camtime [valor]</div>
+                            <div class="command-description">Ajustar tiempo de transición de cámara</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ADMIN NIVEL 1 -->
-        <section id="admin1" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 1 (Helper)</h2>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/a [mensaje]</div>
-                        <div class="command-description">Chat administrativo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/check [id]</div>
-                        <div class="command-description">Verificar propiedades del jugador (casas, vehículos, negocios)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/id [id/nombre]</div>
-                        <div class="command-description">Buscar ID de jugador por nombre (mínimo 3 caracteres)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/admins</div>
-                        <div class="command-description">Lista de administradores en línea con nivel y AFK</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/medialist</div>
-                        <div class="command-description">Lista de media en línea</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/alog</div>
-                        <div class="command-description">Activar/desactivar registro de admin en chat</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/adelaction [id]</div>
-                        <div class="command-description">Eliminar acción de jugador específico</div>
+        <div id="admin1" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Admin Nivel 1 (Helper)
+                    </h2>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/a [mensaje]</div>
+                            <div class="command-description">Chat administrativo</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/check [id]</div>
+                            <div class="command-description">Verificar propiedades del jugador (casas, vehículos, negocios)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/id [id/nombre]</div>
+                            <div class="command-description">Buscar ID de jugador por nombre (mínimo 3 caracteres)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/admins</div>
+                            <div class="command-description">Lista de administradores en línea con nivel y AFK</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/medialist</div>
+                            <div class="command-description">Lista de media en línea</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/alog</div>
+                            <div class="command-description">Activar/desactivar registro de admin en chat</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/adelaction [id]</div>
+                            <div class="command-description">Eliminar acción de jugador específico</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ADMIN NIVEL 2 -->
-        <section id="admin2" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 2 (Moderador)</h2>
-                
-                <h3 class="section-subtitle">🎯 Teletransporte</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/goto [id]</div>
-                        <div class="command-description">Teleportarse hacia un jugador (alias: tp)</div>
+        <div id="admin2" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Admin Nivel 2 (Moderador)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-location-arrow"></i>
+                        Teletransporte
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/goto [id]</div>
+                            <div class="command-description">Teleportarse hacia un jugador (alias: tp)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/gethere [id]</div>
+                            <div class="command-description">Traer jugador hacia ti (alias: metp)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/spawn [id]</div>
+                            <div class="command-description">Enviar jugador al spawn (solo si no está en situaciones especiales)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/gethere [id]</div>
-                        <div class="command-description">Traer jugador hacia ti (alias: metp)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/spawn [id]</div>
-                        <div class="command-description">Enviar jugador al spawn (solo si no está en situaciones especiales)</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">⚙️ Gestión de Jugadores</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/sethp [id] [cantidad]</div>
-                        <div class="command-description">Establecer vida del jugador</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-cog"></i>
+                        Gestión de Jugadores
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/sethp [id] [cantidad]</div>
+                            <div class="command-description">Establecer vida del jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setar [id] [cantidad]</div>
+                            <div class="command-description">Establecer armadura del jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/freeze [id]</div>
+                            <div class="command-description">Congelar jugador (alias: fz)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unfreeze [id]</div>
+                            <div class="command-description">Descongelar jugador (alias: unfz)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/slap [id]</div>
+                            <div class="command-description">Golpear jugador (daño menor)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/gm [id]</div>
+                            <div class="command-description">Verificar modo dios del jugador</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/setar [id] [cantidad]</div>
-                        <div class="command-description">Establecer armadura del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/freeze [id]</div>
-                        <div class="command-description">Congelar jugador (alias: fz)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unfreeze [id]</div>
-                        <div class="command-description">Descongelar jugador (alias: unfz)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/slap [id]</div>
-                        <div class="command-description">Golpear jugador (daño menor)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/gm [id]</div>
-                        <div class="command-description">Verificar modo dios del jugador</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">⚖️ Sanciones</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/kick [id] [razón]</div>
-                        <div class="command-description">Expulsar del servidor</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-gavel"></i>
+                        Sanciones
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/kick [id] [razón]</div>
+                            <div class="command-description">Expulsar del servidor</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/skick [id]</div>
+                            <div class="command-description">Expulsar silenciosamente (sin mensaje público)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/mute [id] [minutos] [razón]</div>
+                            <div class="command-description">Silenciar jugador en chat</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unmute [id]</div>
+                            <div class="command-description">Quitar silencio del jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offmute [nombre] [minutos] [razón]</div>
+                            <div class="command-description">Silenciar jugador offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offunmute [nombre]</div>
+                            <div class="command-description">Quitar silencio de jugador offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/warn [id] [razón]</div>
+                            <div class="command-description">Dar advertencia (3 warns = ban automático 30 días)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unwarn [id]</div>
+                            <div class="command-description">Quitar advertencia</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offwarn [nombre] [razón]</div>
+                            <div class="command-description">Advertir jugador offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offunwarn [nombre]</div>
+                            <div class="command-description">Quitar advertencia offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/jail [id] [minutos] [razón]</div>
+                            <div class="command-description">Enviar a demorgan (5-10080 minutos)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unjail [id]</div>
+                            <div class="command-description">Liberar de demorgan</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offjail [nombre] [minutos] [razón]</div>
+                            <div class="command-description">Demorgan offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offunjail [nombre]</div>
+                            <div class="command-description">Liberar de demorgan offline</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/skick [id]</div>
-                        <div class="command-description">Expulsar silenciosamente (sin mensaje público)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/mute [id] [minutos] [razón]</div>
-                        <div class="command-description">Silenciar jugador en chat</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unmute [id]</div>
-                        <div class="command-description">Quitar silencio del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offmute [nombre] [minutos] [razón]</div>
-                        <div class="command-description">Silenciar jugador offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offunmute [nombre]</div>
-                        <div class="command-description">Quitar silencio de jugador offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/warn [id] [razón]</div>
-                        <div class="command-description">Dar advertencia (3 warns = ban automático 30 días)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unwarn [id]</div>
-                        <div class="command-description">Quitar advertencia</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offwarn [nombre] [razón]</div>
-                        <div class="command-description">Advertir jugador offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offunwarn [nombre]</div>
-                        <div class="command-description">Quitar advertencia offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/jail [id] [minutos] [razón]</div>
-                        <div class="command-description">Enviar a demorgan (5-10080 minutos)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unjail [id]</div>
-                        <div class="command-description">Liberar de demorgan</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offjail [nombre] [minutos] [razón]</div>
-                        <div class="command-description">Demorgan offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offunjail [nombre]</div>
-                        <div class="command-description">Liberar de demorgan offline</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🔍 Utilidades</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/checkwanted [id]</div>
-                        <div class="command-description">Ver estrellas de búsqueda policial</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/clear [id]</div>
-                        <div class="command-description">Quitar búsqueda policial</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ptime [id]</div>
-                        <div class="command-description">Ver tiempo de castigo del jugador (demorgan/arresto/warns/mute)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/accept [id]</div>
-                        <div class="command-description">Aceptar anuncio gubernamental global</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-search"></i>
+                        Utilidades
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/checkwanted [id]</div>
+                            <div class="command-description">Ver estrellas de búsqueda policial</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/clear [id]</div>
+                            <div class="command-description">Quitar búsqueda policial</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/ptime [id]</div>
+                            <div class="command-description">Ver tiempo de castigo del jugador (demorgan/arresto/warns/mute)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/accept [id]</div>
+                            <div class="command-description">Aceptar anuncio gubernamental global</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ADMIN NIVEL 3 -->
-        <section id="admin3" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 3 (Junior Admin)</h2>
-                
-                <h3 class="section-subtitle">🌐 Teletransporte Avanzado</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/tp [id]</div>
-                        <div class="command-description">Teleportarse a jugador</div>
+        <div id="admin3" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Admin Nivel 3 (Junior Admin)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-globe"></i>
+                        Teletransporte Avanzado
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/tp [id]</div>
+                            <div class="command-description">Teleportarse a jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/tpc [x, y, z]</div>
+                            <div class="command-description">Teleportarse a coordenadas específicas</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/tpcar [id]</div>
+                            <div class="command-description">Teleportarse a vehículo por ID</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/metpcar [id]</div>
+                            <div class="command-description">Traer vehículo hacia ti por ID</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/tpcarnumber [placa]</div>
+                            <div class="command-description">Teleportarse a vehículo por número de placa</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setdim [id] [dimension]</div>
+                            <div class="command-description">Cambiar dimensión de jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/checkdim [id]</div>
+                            <div class="command-description">Verificar dimensión del jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setdimcar [id_veh] [dimension]</div>
+                            <div class="command-description">Cambiar dimensión de vehículo</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/tpc [x, y, z]</div>
-                        <div class="command-description">Teleportarse a coordenadas específicas</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/tpcar [id]</div>
-                        <div class="command-description">Teleportarse a vehículo por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/metpcar [id]</div>
-                        <div class="command-description">Traer vehículo hacia ti por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/tpcarnumber [placa]</div>
-                        <div class="command-description">Teleportarse a vehículo por número de placa</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setdim [id] [dimension]</div>
-                        <div class="command-description">Cambiar dimensión de jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/checkdim [id]</div>
-                        <div class="command-description">Verificar dimensión del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setdimcar [id_veh] [dimension]</div>
-                        <div class="command-description">Cambiar dimensión de vehículo</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">💀 Gestión de Vida</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/kill [id]</div>
-                        <div class="command-description">Matar jugador</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-skull"></i>
+                        Gestión de Vida
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/kill [id]</div>
+                            <div class="command-description">Matar jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/revive [id]</div>
+                            <div class="command-description">Revivir jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/hp</div>
+                            <div class="command-description">Curarse a sí mismo (vida completa)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/revive [id]</div>
-                        <div class="command-description">Revivir jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/hp</div>
-                        <div class="command-description">Curarse a sí mismo (vida completa)</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🚫 Sanciones Avanzadas</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/ban [id] [minutos] [razón]</div>
-                        <div class="command-description">Banear jugador (mensaje público)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-ban"></i>
+                        Sanciones Avanzadas
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/ban [id] [minutos] [razón]</div>
+                            <div class="command-description">Banear jugador (mensaje público)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/sban [id] [minutos] [razón]</div>
+                            <div class="command-description">Ban silencioso (sin mensaje público)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offban [nombre] [minutos] [razón]</div>
+                            <div class="command-description">Banear jugador offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unban [nombre]</div>
+                            <div class="command-description">Desbanear jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/nhistory [id/uuid] [true/false]</div>
+                            <div class="command-description">Ver historial de cambios de nombre (cooldown 5s)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/sban [id] [minutos] [razón]</div>
-                        <div class="command-description">Ban silencioso (sin mensaje público)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offban [nombre] [minutos] [razón]</div>
-                        <div class="command-description">Banear jugador offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unban [nombre]</div>
-                        <div class="command-description">Desbanear jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/nhistory [id/uuid] [true/false]</div>
-                        <div class="command-description">Ver historial de cambios de nombre (cooldown 5s)</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">💰 Economía</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/givemoney [id] [cantidad]</div>
-                        <div class="command-description">Dar dinero en efectivo o banco</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-dollar-sign"></i>
+                        Economía
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/givemoney [id] [cantidad]</div>
+                            <div class="command-description">Dar dinero en efectivo o banco</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/asms [id] [mensaje]</div>
+                            <div class="command-description">Enviar SMS administrativo</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/asms [id] [mensaje]</div>
-                        <div class="command-description">Enviar SMS administrativo</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">👻 Utilidades Admin</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/inv</div>
-                        <div class="command-description">Modo invisible (toggle)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-ghost"></i>
+                        Utilidades Admin
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/inv</div>
+                            <div class="command-description">Modo invisible (toggle)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/sp [id]</div>
+                            <div class="command-description">Modo espectador de jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/usp</div>
+                            <div class="command-description">Salir de modo espectador</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/sp [id]</div>
-                        <div class="command-description">Modo espectador de jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/usp</div>
-                        <div class="command-description">Salir de modo espectador</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🚗 Vehículos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/fixcar</div>
-                        <div class="command-description">Reparar vehículo actual</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-car-side"></i>
+                        Vehículos
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/fixcar</div>
+                            <div class="command-description">Reparar vehículo actual</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/fixcarid [id]</div>
+                            <div class="command-description">Reparar vehículo por ID</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/veh [modelo] [color1] [color2]</div>
+                            <div class="command-description">Crear vehículo admin (9999L combustible)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delveh</div>
+                            <div class="command-description">Eliminar vehículo admin actual</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delvehid [id]</div>
+                            <div class="command-description">Eliminar vehículo admin por ID</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delmyveh</div>
+                            <div class="command-description">Eliminar todos tus vehículos admin</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/spveh</div>
+                            <div class="command-description">Respawnear vehículo de fracción actual</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/spvehid [id]</div>
+                            <div class="command-description">Respawnear vehículo de fracción por ID</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/afuel [litros]</div>
+                            <div class="command-description">Llenar tanque de combustible (máx 200L para admin 1-5)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/flip [id_veh]</div>
+                            <div class="command-description">Voltear vehículo por ID</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/fixcarid [id]</div>
-                        <div class="command-description">Reparar vehículo por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/veh [modelo] [color1] [color2]</div>
-                        <div class="command-description">Crear vehículo admin (9999L combustible)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delveh</div>
-                        <div class="command-description">Eliminar vehículo admin actual</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delvehid [id]</div>
-                        <div class="command-description">Eliminar vehículo admin por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delmyveh</div>
-                        <div class="command-description">Eliminar todos tus vehículos admin</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/spveh</div>
-                        <div class="command-description">Respawnear vehículo de fracción actual</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/spvehid [id]</div>
-                        <div class="command-description">Respawnear vehículo de fracción por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/afuel [litros]</div>
-                        <div class="command-description">Llenar tanque de combustible (máx 200L para admin 1-5)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/flip [id_veh]</div>
-                        <div class="command-description">Voltear vehículo por ID</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🗑️ Objetos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/delobj</div>
-                        <div class="command-description">Eliminar próximo objeto recogido</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/adelactionall</div>
-                        <div class="command-description">Eliminar todas las acciones del servidor</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-trash"></i>
+                        Objetos
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/delobj</div>
+                            <div class="command-description">Eliminar próximo objeto recogido</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/adelactionall</div>
+                            <div class="command-description">Eliminar todas las acciones del servidor</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ADMIN NIVEL 4 -->
-        <section id="admin4" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 4 (Admin)</h2>
-                
-                <h3 class="section-subtitle">👤 Gestión de Personajes</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/offgivemoney [nombre] [cantidad]</div>
-                        <div class="command-description">Dar dinero a jugador offline</div>
+        <div id="admin4" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Admin Nivel 4 (Admin)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-user-edit"></i>
+                        Gestión de Personajes
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/offgivemoney [nombre] [cantidad]</div>
+                            <div class="command-description">Dar dinero a jugador offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setname [id] [Nombre_Apellido]</div>
+                            <div class="command-description">Cambiar nombre de jugador (requiere confirmación de otro admin)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/setnameoff [actual] [nuevo]</div>
+                            <div class="command-description">Cambiar nombre offline (requiere confirmación)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/sendcreator [id]</div>
+                            <div class="command-description">Enviar a creador de personaje (requiere confirmación)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/newsimcard [id] [número]</div>
+                            <div class="command-description">Dar nueva SIM card con número específico</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/setname [id] [Nombre_Apellido]</div>
-                        <div class="command-description">Cambiar nombre de jugador (requiere confirmación de otro admin)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setnameoff [actual] [nuevo]</div>
-                        <div class="command-description">Cambiar nombre offline (requiere confirmación)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/sendcreator [id]</div>
-                        <div class="command-description">Enviar a creador de personaje (requiere confirmación)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/newsimcard [id] [número]</div>
-                        <div class="command-description">Dar nueva SIM card con número específico</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🚗 Vehículos Avanzado</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/carnumber [placa]</div>
-                        <div class="command-description">Verificar propietario de vehículo por placa</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-taxi"></i>
+                        Vehículos Avanzado
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/carnumber [placa]</div>
+                            <div class="command-description">Verificar propietario de vehículo por placa</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/givecarnumber [placa_vieja] [placa_nueva]</div>
+                            <div class="command-description">Cambiar placa de vehículo</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/givecarnumber [placa_vieja] [placa_nueva]</div>
-                        <div class="command-description">Cambiar placa de vehículo</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">📊 Progresión</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/giveexp [id] [cantidad]</div>
-                        <div class="command-description">Dar experiencia (puede subir nivel automáticamente)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-chart-line"></i>
+                        Progresión
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/giveexp [id] [cantidad]</div>
+                            <div class="command-description">Dar experiencia (puede subir nivel automáticamente)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/givelvl [id] [cantidad]</div>
+                            <div class="command-description">Dar niveles directamente</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/agl [id]</div>
+                            <div class="command-description">Dar todas las licencias al jugador</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/givelvl [id] [cantidad]</div>
-                        <div class="command-description">Dar niveles directamente</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/agl [id]</div>
-                        <div class="command-description">Dar todas las licencias al jugador</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">⭐ VIP</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/givevip [id] [nivel] [días]</div>
-                        <div class="command-description">Dar VIP (niveles 0-5: Silver/Gold/Platinum/Diamond)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/checkmoney [id]</div>
-                        <div class="command-description">Verificar dinero en efectivo y banco del jugador</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-gem"></i>
+                        VIP
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/givevip [id] [nivel] [días]</div>
+                            <div class="command-description">Dar VIP (niveles 0-5: Silver/Gold/Platinum/Diamond)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/checkmoney [id]</div>
+                            <div class="command-description">Verificar dinero en efectivo y banco del jugador</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ADMIN NIVEL 5 -->
-        <section id="admin5" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 5 (Senior Admin)</h2>
-                
-                <h3 class="section-subtitle">👑 Gestión de Administración</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/setadmin [id]</div>
-                        <div class="command-description">Dar nivel admin a jugador</div>
+        <div id="admin5" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Admin Nivel 5 (Senior Admin)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-user-shield"></i>
+                        Gestión de Administración
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/setadmin [id]</div>
+                            <div class="command-description">Dar nivel admin a jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/deladmin [id]</div>
+                            <div class="command-description">Quitar admin a jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/arank [id] [nivel]</div>
+                            <div class="command-description">Cambiar nivel admin (1-9)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offarank [nombre] [nivel]</div>
+                            <div class="command-description">Cambiar nivel admin offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offdeladmin [nombre]</div>
+                            <div class="command-description">Quitar admin offline</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/deladmin [id]</div>
-                        <div class="command-description">Quitar admin a jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/arank [id] [nivel]</div>
-                        <div class="command-description">Cambiar nivel admin (1-9)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offarank [nombre] [nivel]</div>
-                        <div class="command-description">Cambiar nivel admin offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offdeladmin [nombre]</div>
-                        <div class="command-description">Quitar admin offline</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🏢 Gestión de Fracciones</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/setleader [id] [fracción_id]</div>
-                        <div class="command-description">Dar líder de fracción (ID 1-18)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-sitemap"></i>
+                        Gestión de Fracciones
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/setleader [id] [fracción_id]</div>
+                            <div class="command-description">Dar líder de fracción (ID 1-18)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delleader [id]</div>
+                            <div class="command-description">Quitar líder de fracción</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/deljob [id]</div>
+                            <div class="command-description">Quitar trabajo al jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/delfrac [id]</div>
+                            <div class="command-description">Expulsar de fracción</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offdelfrac [nombre]</div>
+                            <div class="command-description">Expulsar de fracción offline</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/delleader [id]</div>
-                        <div class="command-description">Quitar líder de fracción</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/deljob [id]</div>
-                        <div class="command-description">Quitar trabajo al jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delfrac [id]</div>
-                        <div class="command-description">Expulsar de fracción</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offdelfrac [nombre]</div>
-                        <div class="command-description">Expulsar de fracción offline</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🚫 Sanciones Permanentes</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/hardban [id] [minutos] [razón]</div>
-                        <div class="command-description">Ban permanente (incluye HWID)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offhardban [nombre] [minutos] [razón]</div>
-                        <div class="command-description">Hardban offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unhardban [nombre]</div>
-                        <div class="command-description">Quitar hardban</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ishard [id]</div>
-                        <div class="command-description">Verificar si tiene hardban</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unbanip [ip]</div>
-                        <div class="command-description">Desbanear dirección IP</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/banlogin [login] [minutos] [razón]</div>
-                        <div class="command-description">Banear por login de cuenta</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unbanlogin [login]</div>
-                        <div class="command-description">Desbanear por login</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/crimeban [id] [razón]</div>
-                        <div class="command-description">Banear de sistemas capture/bizwar</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/uncrimeban [id]</div>
-                        <div class="command-description">Quitar ban de crime</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offcrimeban [nombre] [razón]</div>
-                        <div class="command-description">Crime ban offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offuncrimeban [nombre]</div>
-                        <div class="command-description">Quitar crime ban offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/pritonban [id]</div>
-                        <div class="command-description">Ban inmediato sin razón (emergencias)</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">📊 Información</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/getlogin [id]</div>
-                        <div class="command-description">Ver login de cuenta del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/getrb [id]</div>
-                        <div class="command-description">Ver RedBucks de cuenta del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/getvip [id]</div>
-                        <div class="command-description">Ver nivel VIP y fecha de expiración</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/stats [id]</div>
-                        <div class="command-description">Ver estadísticas completas del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offstats [nombre]</div>
-                        <div class="command-description">Ver estadísticas de jugador offline</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🔫 Armas y Objetos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/givegun [id] [arma] [serie]</div>
-                        <div class="command-description">Dar arma con serie específica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delgun [id]</div>
-                        <div class="command-description">Quitar todas las armas del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/giveammo [id] [tipo] [cantidad]</div>
-                        <div class="command-description">Dar munición (tipos 0-4: pistola/rifle/escopeta/smg/sniper)</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">👔 Apariencia</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/giveclothes [id] [tipo] [variación]</div>
-                        <div class="command-description">Dar ropa específica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setskin [id] [modelo]</div>
-                        <div class="command-description">Cambiar skin del jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/sc [id] [draw] [texture]</div>
-                        <div class="command-description">Establecer ropa específica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/sac [id] [draw] [texture]</div>
-                        <div class="command-description">Establecer accesorio (-1 para quitar)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/pa [dict] [anim] [flag]</div>
-                        <div class="command-description">Reproducir animación</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/sa</div>
-                        <div class="command-description">Detener animación</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🚗 Vehículos Premium</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/carcoupon [id] [vehículo]</div>
-                        <div class="command-description">Dar cupón de vehículo (item intercambiable)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vehcustom [categoría] [id]</div>
-                        <div class="command-description">Aplicar tuning personalizado (-1 para resetear)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vehcustompcolor [r] [g] [b] [mod]</div>
-                        <div class="command-description">Color primario custom RGB o mod</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vehcustomscolor [r] [g] [b] [mod]</div>
-                        <div class="command-description">Color secundario custom RGB o mod</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/svm [tipo] [índice]</div>
-                        <div class="command-description">Modificar vehículo específico (tipos: 25=placa, 46=tinte, 66=color1, 67=color2)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/svn [r] [g] [b] [alpha]</div>
-                        <div class="command-description">Neón de vehículo (alpha 0=off)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/svh [salud]</div>
-                        <div class="command-description">Establecer salud de vehículo (0-1000)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vehchange [modelo]</div>
-                        <div class="command-description">Cambiar modelo de vehículo personal</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setfracveh [modelo] [rango] [c1] [c2]</div>
-                        <div class="command-description">Configurar vehículo de fracción</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setfractun [cat] [id]</div>
-                        <div class="command-description">Aplicar tuning a vehículo de fracción (-1 para ver lista)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/stt [potencia] [torque]</div>
-                        <div class="command-description">Ajustar turbo/torque del vehículo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/dmgmodif [id] [multiplicador]</div>
-                        <div class="command-description">Modificador de daño para testing</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🌍 Mundo</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/sw [clima]</div>
-                        <div class="command-description">Cambiar clima del mundo (0-14)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/st [horas] [minutos] [segundos]</div>
-                        <div class="command-description">Cambiar hora del mundo (-1 -1 -1 = desbloquear)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/sl [true/false]</div>
-                        <div class="command-description">Activar/desactivar luces del mundo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/loadipl [ipl]</div>
-                        <div class="command-description">Cargar IPL del mapa</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unloadipl [ipl]</div>
-                        <div class="command-description">Descargar IPL del mapa</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/loadprop [nombre] [tipo]</div>
-                        <div class="command-description">Cargar prop en tu posición</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unloadprop [nombre] [tipo]</div>
-                        <div class="command-description">Descargar prop de tu posición</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/starteffect [efecto] [duración] [loop]</div>
-                        <div class="command-description">Iniciar efecto de pantalla</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/stopeffect [efecto]</div>
-                        <div class="command-description">Detener efecto de pantalla</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🏪 Gestión de Negocios</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/createbusiness [precio] [tipo] [tax]</div>
-                        <div class="command-description">Crear negocio en tu posición (tipos 0-15)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/createunloadpoint [biz_id]</div>
-                        <div class="command-description">Crear punto de descarga para negocio</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/deletebusiness [biz_id]</div>
-                        <div class="command-description">Eliminar negocio completamente</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/changebiztax [biz_id] [tax]</div>
-                        <div class="command-description">Cambiar impuesto del negocio</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/changebizprice [precio]</div>
-                        <div class="command-description">Cambiar precio del negocio (estar en marcador)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setbizmafia [mafia_id]</div>
-                        <div class="command-description">Asignar negocio a mafia (ID 10-13)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/takeoffbiz [biz_id]</div>
-                        <div class="command-description">Quitar negocio al propietario</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setprod</div>
-                        <div class="command-description">Llenar completamente productos del negocio</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/setproductbyindex [biz] [índice] [cantidad]</div>
-                        <div class="command-description">Establecer producto específico por índice</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/deleteproducts [biz_id]</div>
-                        <div class="command-description">Vaciar todos los productos del negocio</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🏠 Gestión de Propiedades</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/changehouseprice [precio]</div>
-                        <div class="command-description">Cambiar precio de casa (estar en marcador)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/housetypeprice [tipo] [precio]</div>
-                        <div class="command-description">Cambiar precio de todas las casas de un tipo (0-6)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delhouseowner</div>
-                        <div class="command-description">Quitar dueño de casa (estar en marcador)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/createsafe [id] [distancia] [min] [max] [dirección]</div>
-                        <div class="command-description">Crear caja fuerte para robo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/removesafe</div>
-                        <div class="command-description">Eliminar caja fuerte cercana</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🎯 Territorios</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/setcolour [gang_id]</div>
-                        <div class="command-description">Cambiar propietario de territorio (gangs ID 1-5)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/changestock [frac] [item] [cantidad] [add]</div>
-                        <div class="command-description">Modificar stock de fracción (items: mats/drugs/medkits/money)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/fsetcmd [cmd] [fracción] [acceso]</div>
-                        <div class="command-description">Cambiar nivel de acceso de comando/arma en fracción</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🎁 Items y Recompensas</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/givereds [id] [cantidad]</div>
-                        <div class="command-description">Dar RedBucks a jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/offgivereds [login] [cantidad]</div>
-                        <div class="command-description">Dar RedBucks a cuenta offline</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/giveredsall [cantidad]</div>
-                        <div class="command-description">Dar RedBucks a todos (1-500 RB)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/givecase [id] [caso_id]</div>
-                        <div class="command-description">Dar caso/caja específica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/additem [ItemId] [cantidad] [data]</div>
-                        <div class="command-description">Dar ítem a jugador por ID</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/goadditem [ItemId] [cantidad] [data]</div>
-                        <div class="command-description">Darte ítem a ti mismo por ID</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🔧 Utilidades Avanzadas</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/agm</div>
-                        <div class="command-description">Modo dios administrativo (toggle)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/redname</div>
-                        <div class="command-description">Nombre rojo visible (toggle)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/hidenick</div>
-                        <div class="command-description">Ocultar nickname sobre cabeza (toggle)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/hideme</div>
-                        <div class="command-description">Modo invisible avanzado (toggle)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/kl</div>
-                        <div class="command-description">KillList: 0=OFF, 1=ON, 2=ON con distancia</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vlist</div>
-                        <div class="command-description">Verificar lista V del servidor</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/skin [modelo]</div>
-                        <div class="command-description">Cambiar tu skin temporalmente (-1 para resetear)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/startcam</div>
-                        <div class="command-description">Iniciar cámara de helicóptero admin</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delad [id] [razón]</div>
-                        <div class="command-description">Eliminar anuncio de LS News</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/global [mensaje]</div>
-                        <div class="command-description">Chat global administrativo para anuncios</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/nalog</div>
-                        <div class="command-description">Activar/desactivar sistema de impuestos</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">💀 Limpieza Total</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/aclear [nombre] [razón]</div>
-                        <div class="command-description">Limpiar completamente personaje (dinero/propiedades/items)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/fclear [fracción_id]</div>
-                        <div class="command-description">Limpiar fracción completa (expulsar todos los miembros)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-user-times"></i>
+                        Sanciones Permanentes
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/hardban [id] [minutos] [razón]</div>
+                            <div class="command-description">Ban permanente (incluye HWID)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/offhardban [nombre] [minutos] [razón]</div>
+                            <div class="command-description">Hardban offline</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unhardban [nombre]</div>
+                            <div class="command-description">Quitar hardban</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/ishard [id]</div>
+                            <div class="command-description">Verificar si tiene hardban</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/unbanip [ip]</div>
+                            <div class="command-description">Desbanear dirección IP</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- ADMIN NIVEL 6-8 -->
-        <section id="admin6" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🛡️ Admin Nivel 6-8 (Super Admin)</h2>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/offgivevip [nivel] [días] [login]</div>
-                        <div class="command-description">Dar VIP a cuenta offline por login</div>
+        <!-- ADMIN NIVEL 9 (DEV) -->
+        <div id="admin9" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-crown"></i>
+                        Developer (Nivel 9)
+                    </h2>
+                    
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-server"></i>
+                        Control del Servidor
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/restart</div>
+                            <div class="command-description">Reiniciar servidor con cuenta regresiva</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/stoprestart</div>
+                            <div class="command-description">Cancelar reinicio programado</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/announce [mensaje]</div>
+                            <div class="command-description">Anuncio global del servidor</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/elog</div>
-                        <div class="command-description">Activar/desactivar registro de errores en chat</div>
+
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-database"></i>
+                        Base de Datos
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/deleteacc [nombre]</div>
+                            <div class="command-description">Eliminar cuenta permanentemente (requiere confirmación)</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/winlog</div>
-                        <div class="command-description">Activar/desactivar registro de ganancias de ruleta</div>
+
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-code"></i>
+                        Desarrollo
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/afuel [litros]</div>
+                            <div class="command-description">Combustible ilimitado (Dev puede usar valores mayores a 200L)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/godmode</div>
+                            <div class="command-description">Activar/desactivar modo dios personal</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- ADMIN NIVEL 9 (DESARROLLADOR) -->
-        <section id="admin9" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">👑 Admin Nivel 9 (Desarrollador)</h2>
-                
-                <h3 class="section-subtitle">⚙️ Control del Servidor</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/restart</div>
-                        <div class="command-description">Reiniciar servidor (requiere confirmación)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/saveserver</div>
-                        <div class="command-description">Guardar estado completo del servidor</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/payday</div>
-                        <div class="command-description">Forzar día de pago inmediato</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🚗 Gestión Masiva</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/spvehs</div>
-                        <div class="command-description">Respawnear todos los vehículos de fracciones/organizaciones</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/vehs [modelo] [c1] [c2] [cantidad]</div>
-                        <div class="command-description">Crear múltiples vehículos admin (1-20)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delvehall</div>
-                        <div class="command-description">Eliminar TODOS los vehículos admin del servidor</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">💰 Economía Global</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/moneymultiplier [valor]</div>
-                        <div class="command-description">Multiplicador de dinero global (1-5)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/expmultiplier [valor]</div>
-                        <div class="command-description">Multiplicador de experiencia global (1-5)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ecosync</div>
-                        <div class="command-description">Sincronizar economía desde base de datos</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🎯 Eventos</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/startmatwars</div>
-                        <div class="command-description">Iniciar guerra por materiales</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/stopmatwars</div>
-                        <div class="command-description">Detener guerra por materiales</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🔄 Sincronización</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/promosync</div>
-                        <div class="command-description">Sincronizar códigos promocionales desde base de datos</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/bonussync</div>
-                        <div class="command-description">Sincronizar códigos bonus desde base de datos</div>
-                    </div>
-                </div>
-
-                <h3 class="section-subtitle">🛠️ Herramientas de Desarrollo</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/save [nombre]</div>
-                        <div class="command-description">Guardar coordenadas actuales con nombre</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/mypos</div>
-                        <div class="command-description">Ver tu posición y rotación actual</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/delobjects [ubicación]</div>
-                        <div class="command-description">Eliminar todos los objetos de una ubicación</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/timerlist</div>
-                        <div class="command-description">Lista de timers activos en el servidor</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
 
         <!-- COMANDOS DE FRACCIONES -->
-        <section id="fracciones" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">🚔 Comandos de Fracciones Especiales</h2>
-                
-                <h3 class="section-subtitle">👮 POLICÍA (LSPD/FIB/SHERIFF)</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/su [pasaporte] [estrellas] [razón]</div>
-                        <div class="command-description">Dar búsqueda policial (1-6 estrellas)</div>
+        <div id="fracciones" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-users"></i>
+                        Comandos por Fracciones
+                    </h2>
+                    
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            Nota Importante
+                        </div>
+                        <p style="color: #c0c0c0; font-size: 0.9em;">Los comandos específicos de fracciones varían según la organización. Consulta con tu líder de fracción para obtener la lista completa de comandos disponibles para tu rol.</p>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/carsu [placa] [razón]</div>
-                        <div class="command-description">Poner búsqueda a vehículo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/cuff [id]</div>
-                        <div class="command-description">Esposar jugador (alias de /pocket)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/uncuff [id]</div>
-                        <div class="command-description">Quitar esposas</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/incar [id]</div>
-                        <div class="command-description">Meter jugador en patrulla</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/pull [id]</div>
-                        <div class="command-description">Sacar jugador de vehículo</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/follow [id]</div>
-                        <div class="command-description">Hacer que jugador te siga</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unfollow</div>
-                        <div class="command-description">Dejar de seguir</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/arrest [id]</div>
-                        <div class="command-description">Arrestar jugador con estrellas</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/rfp [id]</div>
-                        <div class="command-description">Liberar de prisión</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/warg</div>
-                        <div class="command-description">Activar modo alerta policial</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/pd [id]</div>
-                        <div class="command-description">Aceptar llamada al 911</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/takemask [id]</div>
-                        <div class="command-description">Quitar máscara a jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/takegunlic [id]</div>
-                        <div class="command-description">Confiscar licencia de armas</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/takehellic [id]</div>
-                        <div class="command-description">Confiscar licencia de helicóptero</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/takeplanelic [id]</div>
-                        <div class="command-description">Confiscar licencia de avión</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/givegunlic [id] [precio]</div>
-                        <div class="command-description">Dar licencia de armas (precio personalizado)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/pocket [id]</div>
-                        <div class="command-description">Revisar/cambiar estado de bolsillos</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🏥 EMS (HOSPITAL)</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/heal [id] [precio]</div>
-                        <div class="command-description">Curar jugador completamente</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-police"></i>
+                        Comandos Policiales (LSPD/SWAT)
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/su [id] [estrellas] [razón]</div>
+                            <div class="command-description">Dar búsqueda policial (1-6 estrellas)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/arrest [id]</div>
+                            <div class="command-description">Arrestar sospechoso con estrellas</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/cuff [id]</div>
+                            <div class="command-description">Esposar sospechoso</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/uncuff [id]</div>
+                            <div class="command-description">Quitar esposas</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/tazer</div>
+                            <div class="command-description">Equipar/guardar taser</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/ddeny [id]</div>
+                            <div class="command-description">Denegar licencia de conducir</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/medkit [id] [precio]</div>
-                        <div class="command-description">Vender botiquín médico</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/givemedlic [id]</div>
-                        <div class="command-description">Dar licencia médica</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/givepmlic [id] [precio]</div>
-                        <div class="command-description">Dar licencia de paramédico</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/giveqr [id]</div>
-                        <div class="command-description">Dar código QR médico</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/ems [id]</div>
-                        <div class="command-description">Aceptar llamada al EMS</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🔧 MECÁNICO</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/repair [id] [precio]</div>
-                        <div class="command-description">Reparar vehículo del jugador</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-hospital"></i>
+                        Comandos Médicos (EMS)
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/heal [id] [precio]</div>
+                            <div class="command-description">Curar jugador</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/cure [id] [precio]</div>
+                            <div class="command-description">Curar enfermedad/adicción</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/accept death</div>
+                            <div class="command-description">Aceptar llamada de emergencia</div>
+                        </div>
                     </div>
-                    <div class="command-item">
-                        <div class="command-name">/sellfuel [id] [litros] [precio_litro]</div>
-                        <div class="command-description">Vender combustible a jugador</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/buyfuel [litros]</div>
-                        <div class="command-description">Comprar combustible para tu tanque portátil</div>
-                    </div>
-                </div>
 
-                <h3 class="section-subtitle">🔫 GANGS (1-5)</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/capture</div>
-                        <div class="command-description">Iniciar captura de territorio (estar en zona)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-balance-scale"></i>
+                        Comandos Gobierno
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/givelicense [id] [tipo]</div>
+                            <div class="command-description">Dar licencia (tipos: 1=Drive, 2=Fly, 3=Sail, 4=Gun, 5=Biz)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/takelicense [id] [tipo]</div>
+                            <div class="command-description">Quitar licencia</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/opengate</div>
+                            <div class="command-description">Abrir/cerrar puertas de edificios gubernamentales</div>
+                        </div>
                     </div>
-                </div>
 
-                <h3 class="section-subtitle">🏛️ GOBIERNO</h3>
-                <div class="command-list">
-                    <div class="command-item">
-                        <div class="command-name">/go [id]</div>
-                        <div class="command-description">Responder a llamada ciudadana (cualquier facción gov)</div>
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-briefcase"></i>
+                        Comandos Negocios/Mafia
+                    </h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <div class="command-name">/rob</div>
+                            <div class="command-description">Iniciar robo (tiendas/bancos según fracción)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/capture</div>
+                            <div class="command-description">Capturar territorio/punto</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="command-name">/backup</div>
+                            <div class="command-description">Solicitar refuerzos a la fracción</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- INFORMACIÓN ADICIONAL -->
-        <section id="info" class="command-section">
-            <div class="electric-card">
-                <h2 class="section-title">ℹ️ Información del Sistema</h2>
-                
-                <div class="info-box">
-                    <div class="info-title">🏢 IDs de Fracciones</div>
-                    <ul class="info-list">
-                        <li><strong>1</strong> - The Families</li>
-                        <li><strong>2</strong> - The Ballas Gang</li>
-                        <li><strong>3</strong> - Los Santos Vagos</li>
-                        <li><strong>4</strong> - Marabunta Grande</li>
-                        <li><strong>5</strong> - Blood Street</li>
-                        <li><strong>6</strong> - Cityhall</li>
-                        <li><strong>7</strong> - Police (LSPD)</li>
-                        <li><strong>8</strong> - Hospital (EMS)</li>
-                        <li><strong>9</strong> - FIB</li>
-                        <li><strong>10</strong> - La Cosa Nostra</li>
-                        <li><strong>11</strong> - Russian Mafia</li>
-                        <li><strong>12</strong> - Yakuza</li>
-                        <li><strong>13</strong> - Armenian Mafia</li>
-                        <li><strong>14</strong> - Army</li>
-                        <li><strong>15</strong> - LS News</li>
-                        <li><strong>16</strong> - The Lost MC</li>
-                        <li><strong>17</strong> - Merryweather Security</li>
-                        <li><strong>18</strong> - Sheriff</li>
-                    </ul>
-                </div>
+        <!-- INFORMACIÓN -->
+        <div id="info" class="tab-content">
+            <div class="command-section">
+                <div class="electric-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Información General
+                    </h2>
+                    
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-layer-group"></i>
+                            Niveles de Administración
+                        </div>
+                        <ul class="info-list">
+                            <li><strong>Nivel 1 - Helper:</strong> Soporte básico y asistencia a jugadores</li>
+                            <li><strong>Nivel 2 - Moderador:</strong> Gestión de sanciones básicas</li>
+                            <li><strong>Nivel 3 - Junior Admin:</strong> Teletransporte y sanciones permanentes</li>
+                            <li><strong>Nivel 4 - Admin:</strong> Gestión completa de jugadores</li>
+                            <li><strong>Nivel 5 - Senior Admin:</strong> Gestión de staff y fracciones</li>
+                            <li><strong>Nivel 9 - Developer:</strong> Control total del servidor</li>
+                        </ul>
+                    </div>
 
-                <div class="info-box">
-                    <div class="info-title">💼 IDs de Trabajos</div>
-                    <ul class="info-list">
-                        <li><strong>0</strong> - None (Sin trabajo)</li>
-                        <li><strong>1</strong> - Electrician (Electricista)</li>
-                        <li><strong>2</strong> - Postman (Cartero)</li>
-                        <li><strong>3</strong> - Taxi (Taxista)</li>
-                        <li><strong>4</strong> - Bus (Conductor de autobús)</li>
-                        <li><strong>5</strong> - Lawnmower (Jardinero)</li>
-                        <li><strong>6</strong> - Trucker (Camionero)</li>
-                        <li><strong>7</strong> - Cash Collector (Recolector)</li>
-                        <li><strong>8</strong> - Car Mechanic (Mecánico)</li>
-                    </ul>
-                </div>
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Importante
+                        </div>
+                        <ul class="info-list">
+                            <li>Haz click en cualquier comando para copiarlo automáticamente</li>
+                            <li>Usa la barra de búsqueda para encontrar comandos específicos</li>
+                            <li>Los comandos marcados con (alias:) tienen nombres alternativos</li>
+                            <li>Respeta las reglas del servidor al usar los comandos</li>
+                            <li>Reporta cualquier bug o mal funcionamiento al staff</li>
+                        </ul>
+                    </div>
 
-                <div class="info-box">
-                    <div class="info-title">🔫 Tipos de Munición</div>
-                    <ul class="info-list">
-                        <li><strong>Tipo 0</strong> (ID 200) - PistolAmmo: Pistolas</li>
-                        <li><strong>Tipo 1</strong> (ID 202) - RiflesAmmo: Rifles de asalto</li>
-                        <li><strong>Tipo 2</strong> (ID 204) - ShotgunsAmmo: Escopetas</li>
-                        <li><strong>Tipo 3</strong> (ID 201) - SMGAmmo: Subfusiles</li>
-                        <li><strong>Tipo 4</strong> (ID 203) - SniperAmmo: Francotiradores</li>
-                    </ul>
-                </div>
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Sistema de Sanciones
+                        </div>
+                        <ul class="info-list">
+                            <li><strong>Warns:</strong> 3 advertencias = Ban automático de 30 días</li>
+                            <li><strong>Demorgan:</strong> Prisión administrativa (5-10080 minutos)</li>
+                            <li><strong>Ban:</strong> Expulsión temporal del servidor</li>
+                            <li><strong>Hardban:</strong> Ban permanente incluyendo HWID</li>
+                        </ul>
+                    </div>
 
-                <div class="info-box">
-                    <div class="info-title">🏪 Tipos de Negocios (IDs)</div>
-                    <ul class="info-list">
-                        <li><strong>0</strong> - 24/7 (Tienda de conveniencia)</li>
-                        <li><strong>1</strong> - Petrol Station (Gasolinera)</li>
-                        <li><strong>2</strong> - Premium Autoroom (Concesionario Premium)</li>
-                        <li><strong>3</strong> - Luxor Autoroom (Concesionario Luxor)</li>
-                        <li><strong>4</strong> - Low Autoroom (Concesionario Low)</li>
-                        <li><strong>5</strong> - Motoroom (Concesionario de motos)</li>
-                        <li><strong>6</strong> - Gun Shop (Armería)</li>
-                        <li><strong>7</strong> - Clothes Shop (Tienda de ropa)</li>
-                        <li><strong>8</strong> - Burger-Shot (Restaurante)</li>
-                        <li><strong>9</strong> - Tattoo Salon (Salón de tatuajes)</li>
-                        <li><strong>10</strong> - Barber Shop (Barbería)</li>
-                        <li><strong>11</strong> - Masks Shop (Tienda de máscaras)</li>
-                        <li><strong>12</strong> - LS Customs (Taller de tuning)</li>
-                        <li><strong>13</strong> - Car Wash (Lavado de autos)</li>
-                        <li><strong>14</strong> - Pet Shop (Tienda de mascotas)</li>
-                        <li><strong>15</strong> - Elite Autoroom (Concesionario Elite)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🏠 Tipos de Casas</div>
-                    <ul class="info-list">
-                        <li><strong>0-6</strong> - Diferentes clases de casas</li>
-                        <li><strong>7</strong> - Estacionamiento (Parking)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🎨 IDs de Tuning (Categorías)</div>
-                    <ul class="info-list">
-                        <li><strong>0</strong> - Spoiler (Alerón)</li>
-                        <li><strong>1</strong> - Front Bumper (Parachoques delantero)</li>
-                        <li><strong>2</strong> - Rear Bumper (Parachoques trasero)</li>
-                        <li><strong>3</strong> - Side Skirt (Faldones laterales)</li>
-                        <li><strong>4</strong> - Muffler (Escape)</li>
-                        <li><strong>5</strong> - Wings (Alerones)</li>
-                        <li><strong>6</strong> - Roof (Techo)</li>
-                        <li><strong>7</strong> - Hood (Capó)</li>
-                        <li><strong>8</strong> - Vinyls (Vinilos)</li>
-                        <li><strong>9</strong> - Lattice (Rejilla)</li>
-                        <li><strong>10</strong> - Engine (Motor)</li>
-                        <li><strong>11</strong> - Turbo (0=off, 1=on)</li>
-                        <li><strong>12</strong> - Horn (Claxon)</li>
-                        <li><strong>13</strong> - Transmission (Transmisión)</li>
-                        <li><strong>14</strong> - Window Tint (Tinte de ventanas)</li>
-                        <li><strong>15</strong> - Suspension (Suspensión)</li>
-                        <li><strong>16</strong> - Brakes (Frenos)</li>
-                        <li><strong>17</strong> - Headlights (Faros)</li>
-                        <li><strong>18</strong> - Number Plate (Estilo de placa)</li>
-                        <li><strong>19</strong> - Neon Red (Neón rojo 0-255)</li>
-                        <li><strong>20</strong> - Neon Green (Neón verde 0-255)</li>
-                        <li><strong>21</strong> - Neon Blue (Neón azul 0-255)</li>
-                        <li><strong>22</strong> - Neon Alpha (Neón activación 0=off)</li>
-                        <li><strong>23</strong> - Wheels Type (Tipo de rines)</li>
-                        <li><strong>24</strong> - Wheels (Rines)</li>
-                        <li><strong>25</strong> - Wheels Color (Color de rines)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🌦️ IDs de Clima</div>
-                    <ul class="info-list">
-                        <li><strong>0</strong> - Extra Sunny (Muy soleado)</li>
-                        <li><strong>1</strong> - Clear (Despejado)</li>
-                        <li><strong>2</strong> - Clouds (Nublado)</li>
-                        <li><strong>3</strong> - Smog (Smog)</li>
-                        <li><strong>4</strong> - Foggy (Niebla)</li>
-                        <li><strong>5</strong> - Overcast (Nublado oscuro)</li>
-                        <li><strong>6</strong> - Rain (Lluvia)</li>
-                        <li><strong>7</strong> - Thunder (Tormenta)</li>
-                        <li><strong>8</strong> - Clearing (Aclarando)</li>
-                        <li><strong>9</strong> - Neutral (Neutral)</li>
-                        <li><strong>10</strong> - Snow (Nieve)</li>
-                        <li><strong>11</strong> - Blizzard (Nevada)</li>
-                        <li><strong>12</strong> - Light Snow (Nieve ligera)</li>
-                        <li><strong>13</strong> - Christmas (Navidad)</li>
-                        <li><strong>14</strong> - Halloween (Halloween)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">⭐ Niveles VIP</div>
-                    <ul class="info-list">
-                        <li><strong>0</strong> - Sin VIP</li>
-                        <li><strong>1</strong> - Silver VIP</li>
-                        <li><strong>2</strong> - Gold VIP</li>
-                        <li><strong>3</strong> - Platinum VIP</li>
-                        <li><strong>4</strong> - Diamond VIP</li>
-                        <li><strong>5</strong> - VIP Especial</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">📋 Notas Importantes</div>
-                    <ul class="info-list">
-                        <li>Comandos con razón usan GreedyArg (todo el texto como un argumento)</li>
-                        <li>Límite de jail/demorgan: 5-10080 minutos (1 semana)</li>
-                        <li>Sistema anti-exploit bloquea palabras prohibidas en razones</li>
-                        <li>Cooldowns: /report (variable), /nhistory (5s), /global (10 min si bloqueo)</li>
-                        <li>Hardban incluye bloqueo de HWID (permanente)</li>
-                        <li>Crime ban bloquea sistemas capture y bizwar</li>
-                        <li>3 warns = ban automático de 30 días</li>
-                        <li>Los admins nivel 6+ pueden usar /hideme para ocultarse</li>
-                        <li>Verificación de permisos por nivel admin en cada comando</li>
-                        <li>Sistema de confirmación para comandos críticos (nivel 2-4)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🎮 Atajos y Alias</div>
-                    <ul class="info-list">
-                        <li><strong>/tp</strong> = /goto (Teleportarse a jugador)</li>
-                        <li><strong>/metp</strong> = /gethere (Traer jugador)</li>
-                        <li><strong>/fz</strong> = /freeze (Congelar)</li>
-                        <li><strong>/unfz</strong> = /unfreeze (Descongelar)</li>
-                        <li><strong>/usp</strong> = Salir de modo espectador</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🔐 Códigos Especiales de Admin</div>
-                    <ul class="info-list">
-                        <li><strong>/fajsd78fasasf</strong> - Comando oculto admin (nivel alto)</li>
-                        <li><strong>/fasjf78das78f</strong> - Comando oculto admin (nivel alto)</li>
-                        <li><strong>/ijfja78f32fs</strong> - Comando oculto admin (nivel alto)</li>
-                        <li style="color: #ff4444;">⚠️ Estos comandos son secretos y solo para situaciones especiales</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">📱 Comandos de Teléfono/Items</div>
-                    <ul class="info-list">
-                        <li>Los comandos del teléfono se manejan desde la interfaz móvil</li>
-                        <li>Items se pueden usar desde el inventario (tecla I)</li>
-                        <li>Para ver IDs de items completos consultar itemsInfo.js</li>
-                        <li>IDs de armas: 100-195 (pistolas, rifles, melee, etc.)</li>
-                        <li>IDs de munición: 200-204 (por tipo de arma)</li>
-                        <li>IDs de modificaciones: 206-214 (tuning de armas)</li>
-                        <li>IDs de ropa: negativos (-15 a -1)</li>
-                        <li>IDs de casos: 250-287 (casos/cajas especiales)</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">⚙️ Configuración de Vehículos SVM</div>
-                    <ul class="info-list">
-                        <li><strong>25</strong> - NumberPlateStyle (Estilo de placa)</li>
-                        <li><strong>46</strong> - WindowTint (Tinte de ventanas)</li>
-                        <li><strong>66</strong> - PrimaryColor (Color primario)</li>
-                        <li><strong>67</strong> - SecondaryColor (Color secundario)</li>
-                        <li><strong>133722822</strong> - Cambiar modelo de vehículo</li>
-                        <li><strong>133722823</strong> - Cambiar placa de vehículo</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🎯 Rangos y Accesos de Fracciones</div>
-                    <ul class="info-list">
-                        <li>Cada fracción tiene rangos del 1 al 10-15 (varía por fracción)</li>
-                        <li>Líderes tienen el rango más alto de su fracción</li>
-                        <li>Accesos se configuran por rango en cada fracción</li>
-                        <li>Comandos de fracción requieren estar en servicio (/duty)</li>
-                        <li>Sistema de permisos personalizable con /fsetcmd</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">💡 Tips para Administradores</div>
-                    <ul class="info-list">
-                        <li>Usa /alog para ver acciones de otros admins en tiempo real</li>
-                        <li>Usa /sp para seguir sospechosos sin ser detectado</li>
-                        <li>Usa /inv antes de /tp para moverte sin ser visto</li>
-                        <li>Usa /stats antes de sancionar para verificar historial</li>
-                        <li>Usa /nhistory para detectar evasión de bans</li>
-                        <li>Usa /ptime para verificar castigos actuales</li>
-                        <li>Comandos offline (off*) requieren nombre exacto: Nombre_Apellido</li>
-                        <li>Guarda evidencia con /save antes de sancionar</li>
-                        <li>Usa /kl para detectar combat logging automáticamente</li>
-                        <li>Confirma información crítica con /check antes de /aclear</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">🚨 Procedimientos de Emergencia</div>
-                    <ul class="info-list">
-                        <li><strong>Cheater activo:</strong> /sp → /ban → /hardban si reincide</li>
-                        <li><strong>Troll masivo:</strong> /jail inmediato → investigar → /ban</li>
-                        <li><strong>Crasheo:</strong> /pritonban si es urgente</li>
-                        <li><strong>Bug abuse:</strong> /freeze → /jail → reportar a devs</li>
-                        <li><strong>Evasión de ban:</strong> /nhistory → /hardban</li>
-                        <li><strong>Conflicto entre admins:</strong> Contactar admin superior</li>
-                        <li><strong>Lag extremo:</strong> /spvehs → /saveserver</li>
-                    </ul>
+                    <div class="info-box">
+                        <div class="info-title">
+                            <i class="fas fa-rocket"></i>
+                            Actualizaciones
+                        </div>
+                        <p style="color: #c0c0c0; font-size: 0.9em; line-height: 1.6;">
+                            Este sistema de comandos se actualiza regularmente. Para ver las últimas actualizaciones, 
+                            cambios y nuevos comandos, consulta el Discord oficial del servidor o contacta con el staff.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
 
     </div>
 
+    <!-- Search Box -->
+    <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Buscar comando...">
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <footer>
-        <p>🎮 Sistema de Comandos CCS Night RAGEMP</p>
-        <p>Última actualización: 2025 | Todos los derechos reservados</p>
-        <p style="margin-top: 10px; color: #666;">💻 Desarrollado con tecnologías web modernas</p>
+        <p><i class="fas fa-gamepad"></i> CCS Night RAGEMP © 2024 | Sistema de Comandos v3.0</p>
+        <p style="margin-top: 8px; font-size: 0.85em;">
+            <i class="fas fa-lightbulb"></i> Tip: Click en los comandos para copiarlos al portapapeles
+        </p>
     </footer>
 
     <script>
-        // Click Spark Effect
-        document.addEventListener('click', function(e) {
-            createSpark(e.clientX, e.clientY);
+        // Tab System
+        const tabButtons = document.querySelectorAll('.dock-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+                
+                // Scroll to top when changing tabs
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
 
-        function createSpark(x, y) {
+        // Click spark effect
+        document.addEventListener('click', function(e) {
             const colors = ['#8a2be2', '#00bfff', '#ff00ff', '#00ffff'];
             const sparkCount = 8;
             
             for (let i = 0; i < sparkCount; i++) {
                 const spark = document.createElement('div');
                 spark.className = 'spark';
+                
+                const x = e.clientX;
+                const y = e.clientY;
+                
                 spark.style.left = x + 'px';
                 spark.style.top = y + 'px';
-                spark.style.width = '8px';
-                spark.style.height = '8px';
+                spark.style.width = '6px';
+                spark.style.height = '6px';
                 spark.style.background = colors[Math.floor(Math.random() * colors.length)];
                 spark.style.borderRadius = '50%';
                 spark.style.boxShadow = `0 0 10px ${colors[Math.floor(Math.random() * colors.length)]}`;
                 
                 const angle = (Math.PI * 2 * i) / sparkCount;
-                const velocity = 50;
+                const velocity = 40;
                 const vx = Math.cos(angle) * velocity;
                 const vy = Math.sin(angle) * velocity;
                 
@@ -2002,36 +1733,9 @@
                     spark.remove();
                 }, 600);
             }
-        }
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('.dock-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                
-                if (targetSection) {
-                    targetSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
         });
 
-        // Add hover effect to command items
-        document.querySelectorAll('.command-item').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateX(10px) scale(1.02)';
-            });
-            
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateX(10px)';
-            });
-        });
-
-        // Add click to copy command name
+        // Click to copy command name
         document.querySelectorAll('.command-name').forEach(cmd => {
             cmd.style.cursor = 'pointer';
             cmd.title = 'Click para copiar comando';
@@ -2041,7 +1745,6 @@
                 const commandText = this.textContent;
                 
                 navigator.clipboard.writeText(commandText).then(() => {
-                    // Show copy feedback
                     const originalText = this.textContent;
                     this.textContent = '✓ Copiado!';
                     this.style.color = '#00ff00';
@@ -2056,131 +1759,39 @@
             });
         });
 
-        // Highlight active section in navigation
-        const sections = document.querySelectorAll('.command-section');
-        const navButtons = document.querySelectorAll('.dock-button');
-
-        const observerOptions = {
-            root: null,
-            rootMargin: '-100px 0px -80% 0px',
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    navButtons.forEach(btn => {
-                        if (btn.getAttribute('href') === `#${id}`) {
-                            btn.style.background = 'linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(0, 191, 255, 0.5))';
-                            btn.style.transform = 'translateY(-2px) scale(1.05)';
-                        } else {
-                            btn.style.background = 'linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 191, 255, 0.2))';
-                            btn.style.transform = 'translateY(0) scale(1)';
-                        }
-                    });
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const activeTab = document.querySelector('.tab-content.active');
+            const allCommands = activeTab.querySelectorAll('.command-item');
+            
+            allCommands.forEach(cmd => {
+                const commandName = cmd.querySelector('.command-name').textContent.toLowerCase();
+                const commandDesc = cmd.querySelector('.command-description').textContent.toLowerCase();
+                
+                if (commandName.includes(searchTerm) || commandDesc.includes(searchTerm)) {
+                    cmd.style.display = 'block';
+                    if (searchTerm) {
+                        cmd.style.background = 'rgba(138, 43, 226, 0.2)';
+                    } else {
+                        cmd.style.background = 'rgba(10, 10, 15, 0.6)';
+                    }
+                } else {
+                    cmd.style.display = 'none';
                 }
             });
-        }, observerOptions);
-
-        sections.forEach(section => {
-            observer.observe(section);
         });
 
-        // Search functionality (bonus feature)
-        const addSearchBox = () => {
-            const searchContainer = document.createElement('div');
-            searchContainer.style.cssText = `
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                z-index: 1000;
-            `;
-            
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.placeholder = '🔍 Buscar comando...';
-            searchInput.style.cssText = `
-                padding: 12px 20px;
-                border: 2px solid rgba(138, 43, 226, 0.5);
-                border-radius: 25px;
-                background: rgba(26, 26, 46, 0.9);
-                color: #fff;
-                font-size: 14px;
-                outline: none;
-                width: 250px;
-                backdrop-filter: blur(10px);
-                transition: all 0.3s ease;
-            `;
-            
-            searchInput.addEventListener('focus', function() {
-                this.style.borderColor = 'rgba(138, 43, 226, 1)';
-                this.style.boxShadow = '0 0 20px rgba(138, 43, 226, 0.5)';
-                this.style.width = '300px';
-            });
-            
-            searchInput.addEventListener('blur', function() {
-                if (!this.value) {
-                    this.style.width = '250px';
-                    this.style.boxShadow = 'none';
-                }
-            });
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const allCommands = document.querySelectorAll('.command-item');
-                
-                allCommands.forEach(cmd => {
-                    const commandName = cmd.querySelector('.command-name').textContent.toLowerCase();
-                    const commandDesc = cmd.querySelector('.command-description').textContent.toLowerCase();
-                    
-                    if (commandName.includes(searchTerm) || commandDesc.includes(searchTerm)) {
-                        cmd.style.display = 'block';
-                        if (searchTerm) {
-                            cmd.style.background = 'rgba(138, 43, 226, 0.2)';
-                        } else {
-                            cmd.style.background = 'rgba(10, 10, 15, 0.6)';
-                        }
-                    } else {
-                        cmd.style.display = 'none';
-                    }
-                });
-            });
-            
-            searchContainer.appendChild(searchInput);
-            document.body.appendChild(searchContainer);
-        };
-        
-        addSearchBox();
-
-        // Add scroll to top button
-        const scrollTopBtn = document.createElement('button');
-        scrollTopBtn.innerHTML = '↑';
-        scrollTopBtn.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(0, 191, 255, 0.8));
-            border: 2px solid rgba(138, 43, 226, 0.5);
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        `;
+        // Scroll to top button
+        const scrollTopBtn = document.querySelector('.scroll-top');
         
         window.addEventListener('scroll', () => {
             if (window.pageYOffset > 300) {
-                scrollTopBtn.style.opacity = '1';
-                scrollTopBtn.style.transform = 'scale(1)';
+                scrollTopBtn.classList.add('show');
             } else {
-                scrollTopBtn.style.opacity = '0';
-                scrollTopBtn.style.transform = 'scale(0.8)';
+                scrollTopBtn.classList.remove('show');
             }
         });
         
@@ -2190,24 +1801,11 @@
                 behavior: 'smooth'
             });
         });
-        
-        scrollTopBtn.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.1)';
-            this.style.boxShadow = '0 0 30px rgba(138, 43, 226, 0.8)';
-        });
-        
-        scrollTopBtn.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-            this.style.boxShadow = 'none';
-        });
-        
-        document.body.appendChild(scrollTopBtn);
 
         // Console easter egg
         console.log('%c🎮 CCS Night RAGEMP', 'color: #8a2be2; font-size: 24px; font-weight: bold;');
-        console.log('%c📋 Sistema de Comandos v2.0', 'color: #00bfff; font-size: 16px;');
+        console.log('%c📋 Sistema de Comandos v3.0', 'color: #00bfff; font-size: 16px;');
         console.log('%c💡 Tip: Puedes hacer click en los comandos para copiarlos', 'color: #888; font-size: 12px;');
     </script>
-	<a href="index.html" class="btn" style="position:fixed;top:20px;right:20px;background:#1e90ff;color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none;font-weight:600;z-index:99">Ver Leyes 📘</a>
 </body>
 </html>

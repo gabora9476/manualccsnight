@@ -61,17 +61,60 @@
 
   .btn-comandos {
     position: fixed; top: 20px; right: 20px;
-    background: var(--accent); color: white; text-decoration: none;
-    padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 11px; z-index: 100;
+    background: linear-gradient(135deg, #1e90ff, #00bfff);
+    color: white; text-decoration: none;
+    padding: 10px 16px; border-radius: 8px; 
+    font-weight: 600; font-size: 0.9em; z-index: 100;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
+    transition: all 0.3s ease;
+  }
+  .btn-comandos:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.6);
+  }
+  
+  /* Click Effect */
+  .click-spark {
+    position: fixed;
+    pointer-events: none;
+    animation: sparkAnimation 0.6s ease-out forwards;
+    z-index: 9999;
+    border-radius: 50%;
+  }
+  
+  @keyframes sparkAnimation {
+    0% {
+      opacity: 1;
+      transform: scale(0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2) rotate(360deg);
+    }
   }
   
   .page::-webkit-scrollbar { width: 4px; }
   .page::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+  
+  @media (max-width: 768px) {
+    .btn-comandos {
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+      font-size: 0.8em;
+    }
+  }
 </style>
 </head>
 <body>
 
-<a href="index.html" class="btn-comandos">⚙️ COMANDOS</a>
+<a href="comandos.html" class="btn-comandos">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+  <span>Ver Comandos</span>
+</a>
 
 <div class="main-container">
   <div class="book-shell" id="book">
@@ -82,7 +125,7 @@
 
   <div class="nav-bar">
     <button class="nav-btn" onclick="changePage(-1)">◀</button>
-    <div class="page-num" id="page-indicator">1 / 15</div>
+    <div class="page-num" id="page-indicator">1 / 20</div>
     <button class="nav-btn" onclick="changePage(1)">▶</button>
   </div>
 </div>
@@ -109,121 +152,176 @@ const content = [
   {
     title: "PÁG. 2",
     body: `<h3>Art. 1: Preámbulo y Objeto</h3>
-    <p>La presente Ley tiene como fin regular la conducta de los ciudadanos dentro del territorio de Caracas, garantizando el equilibrio, el respeto y la coherencia del roleplay venezolano.</p>
-    <h3>Art. 2: Ámbito de Aplicación</h3>
-    <p>Esta Ley es de cumplimiento <b>obligatorio</b> para toda persona, sin excepción de cargo, facción o nivel. Se rige por los principios de Realismo y Equidad.</p>
-    <h3>Art. 3: Derechos del Ciudadano</h3>
-    <p>Todo ciudadano tiene derecho a un trato digno, al desarrollo de su personaje y a denunciar abusos mediante los canales oficiales.</p>`
+    <p>Esta normativa fue creada pa' que todo el mundo sepa cómo manejarse dentro de Caracas Night. Aquí roleas como venezolano, respetando la lógica y el realismo. No vale inventar vainas locas que no tienen sentido.</p>
+    <h3>Art. 2: Aplicación Universal</h3>
+    <p>Estas reglas aplican pa' <b>todo el mundo</b> sin importar si eres admin, líder de banda o recién llegado. Nadie está por encima de la ley del servidor. Si te agarran violándola, te caen las consecuencias.</p>
+    <h3>Art. 3: Derechos Básicos</h3>
+    <p>Tienes derecho a rolear tranquilo, desarrollar tu personaje como te guste (dentro de lo permitido) y denunciar cualquier abuso que veas. Pa' eso están los reportes y el staff.</p>`
   },
   {
     title: "PÁG. 3",
-    body: `<h3>Art. 4: Protección a Novatos (Nivel < 3)</h3>
-    <p>Todo jugador con <b>nivel inferior a 3</b> será considerado ciudadano en formación y gozará de inmunidad contra roles agresivos.</p>
-    <div class="example">Está prohibido robar, secuestrar, asesinar, extorsionar o amenazar a un nivel menor a 3.</div>
-    <h3>Art. 5: Sanción por Violentar a Novatos</h3>
-    <p>Toda persona que ejecute acciones violentas contra ciudadanos nivel < 3 será sancionada y el rol será anulado de inmediato.</p>
-    <h3>Art. 6: Restricción de Novatos</h3>
-    <p>Los jugadores nivel < 3 tampoco podrán ejecutar robos ni delitos graves aprovechando su inmunidad.</p>`
+    body: `<h3>Art. 4: Protección a Novatos</h3>
+    <p>Los carajos que están empezando (nivel menor a 3) no pueden ser víctimas de robos, secuestros ni asesinatos. Están aprendiendo, déjalos tranquilos. Meterse con ellos te trae problemas serios.</p>
+    <div class="example">Ejemplo: Si ves a alguien nivel 2 caminando por ahí, no le puedes robar ni joder. Punto.</div>
+    <h3>Art. 5: Sanción por Abusar de Novatos</h3>
+    <p>Si te agarran violentando a un novato, el rol se anula al instante y te cae ban temporal o permanente dependiendo de qué tan grave fue.</p>
+    <h3>Art. 6: Límites de Novatos</h3>
+    <p>Los novatos tampoco se pueden aprovechar de su inmunidad pa' hacer roles criminales. Si te pasas de vivo usando eso, también te sancionan.</p>`
   },
   {
     title: "PÁG. 4",
     body: `<h3>Art. 7: Equilibrio de Fuerzas</h3>
-    <p><b>A) Proporcionalidad:</b> Con 2 policías activos, solo podrán participar 2 civiles en roles agresivos.<br>
-    <b>B) Suspensión:</b> Si no hay policías activos en la ciudad, se suspende automáticamente cualquier rol violento.</p>
-    <h3>Art. 8: Requisitos Mínimos</h3>
-    <p>Para ejecutar roles agresivos complejos (asaltos a bancos grandes o sedes) deberán existir mínimo 4 policías y 4 antisociales activos.</p>
-    <h3>Art. 9: Actos de Alta Gravedad</h3>
-    <p>Robos de patrullas, secuestros de funcionarios o atentados públicos solo serán válidos con al menos <b>20 funcionarios policiales activos</b>.</p>`
+    <p>Si hay 2 policías conectados, solo pueden entrarle 2 malandros a un rol agresivo. Esto es pa' que no sea injusto. Si no hay policía en línea, se suspenden automáticamente los roles violentos hasta que llegue alguien.</p>
+    <h3>Art. 8: Requisitos para Roles Grandes</h3>
+    <p>Pa' hacer un atraco grande tipo banco central o sede gubernamental, necesitas mínimo 4 policías y 4 antisociales activos. No vale hacer eso con 2 pelaos.</p>
+    <h3>Art. 9: Actos de Alto Impacto</h3>
+    <p>Si quieres robar patrullas, secuestrar funcionarios o hacer atentados públicos, necesitas que haya mínimo <b>20 policías activos</b> en la ciudad. Si no, el rol no es válido.</p>`
   },
   {
     title: "PÁG. 5",
     body: `<h3>Art. 10: Metagaming (MG)</h3>
-    <p>Queda prohibido usar información obtenida fuera de rol (Discord, WhatsApp, Streams o ver la ID) para actuar dentro del juego.</p>
-    <div class="example">Reconocer a un enmascarado por su voz si nunca has escuchado su voz antes de forma oficial es MetaGaming.</div>
+    <p>Prohibido usar información que conseguiste fuera del juego (Discord, streams, ver la ID del pana) pa' actuar dentro del rol. Si no lo supiste en personaje, no lo sabes punto.</p>
+    <div class="example">Ejemplo: No puedes reconocer a alguien enmascarado solo porque viste su ID o porque lo escuchaste en Discord.</div>
     <h3>Art. 11: Powergaming (PG)</h3>
-    <p>Prohibido ejecutar acciones imposibles que excedan las capacidades humanas o del entorno del juego.</p>
+    <p>Nada de hacerte el superhéroe. No puedes hacer cosas imposibles tipo aguantar 50 tiros, saltar edificios o cargar 10 armas a la vez. Todo tiene que ser realista.</p>
     <h3>Art. 12: Valor de Vida (FearRP)</h3>
-    <p>Todo ciudadano debe reaccionar con miedo y lógica. Si estás desarmado y te apuntan, tu única opción es obedecer.</p>`
+    <p>Si te apuntan y estás desarmado, tienes que tener miedo. No puedes hacerte el machito y salir corriendo. Obedeces o te matan, así de simple.</p>`
   },
   {
     title: "PÁG. 6",
-    body: `<h3>Art. 13: Penalizaciones Vehiculares</h3>
-    <p>En Caracas Night, el realismo automotriz es ley. Está <b>totalmente prohibido</b> subir cerros, colinas o lugares montañosos con vehículos que no sean Off-Road (4x4, Motos de Trail, etc).</p>
-    <div class="example"><b>Sanción:</b> Uso de vehículo inadecuado. Conducir un deportivo por el Ávila resultará en incautación y multa grave.</div>
+    body: `<h3>Art. 13: Uso Realista de Vehículos</h3>
+    <p>Si tienes un Malibu o un carro bajito, no puedes andar subiéndote al Ávila como si fuera una mula. Solo vehículos 4x4 y motos trail pueden ir por cerros y montañas. Violar esto te trae multa y decomiso.</p>
+    <div class="example">Deportivos, sedanes y carros de calle NO pueden ir por terreno montañoso. Usa la lógica.</div>
     <h3>Art. 14: Rol de Heridas</h3>
-    <p>Tras un impacto o caída, es obligatorio rolear el estado físico mediante /me antes de continuar cualquier acción.</p>`
+    <p>Si te caes, te dan un coñazo o chocas fuerte, tienes que rolear las heridas con /me antes de seguir como si nada. No vale levantarse y salir corriendo como Rambo.</p>
+    <h3>Art. 15: New Life Rule (NLR)</h3>
+    <p>Si mueres y te llevan al hospital, pierdes la memoria de lo que pasó 30 minutos antes. No puedes volver a la zona donde caíste ni vengarte. Empiezas de cero.</p>`
   },
   {
     title: "PÁG. 7",
-    body: `<h3>Art. 15: Combate y Ghost Peeking</h3>
-    <p>Disparar sin visual real invalida el rol. El uso abusivo de la cámara en 3ra persona para disparar desde coberturas totales es sancionable.</p>
-    <div class="example">Debes exponer al menos la mitad del torso o la cabeza para que el intercambio de disparos sea legal y justo.</div>
-    <h3>Art. 16: Armas Largas</h3>
-    <p>Prohibidas en roles urbanos leves o zonas residenciales. Su uso está reservado para conflictos de bandas en zonas rojas o enfrentamientos de gran escala.</p>`
+    body: `<h3>Art. 16: Combat y Ghost Peeking</h3>
+    <p>Pa' disparar tienes que exponerte. Nada de quedarte escondido viendo con la cámara y disparar sin que te vean. Mínimo tienes que mostrar medio cuerpo o la cabeza pa' que sea legal.</p>
+    <div class="example">Si te escondes detrás de un muro y solo sacas el cañón sin mostrarte, estás haciendo trampa.</div>
+    <h3>Art. 17: Armas Largas en la Ciudad</h3>
+    <p>Las armas largas (rifles, escopetas) solo se usan en zonas rojas o conflictos serios entre bandas. En el centro o zonas residenciales está prohibido sacarlas a menos que sea algo justificado.</p>
+    <h3>Art. 18: Zonas Seguras (Safe Zones)</h3>
+    <p>El hospital, la comisaría central y las sedes de gobierno son zonas protegidas. No puedes armar tiroteos ni secuestrar gente ahí. Violar esto es ban directo.</p>`
   },
   {
     title: "PÁG. 8",
-    body: `<h3>Art. 17: Protección de Género</h3>
-    <p><b>TOLERANCIA CERO:</b> El acoso sexual, comentarios lascivos no consentidos o la misoginia hacia las mujeres resultará en <b>BAN PERMANENTE</b>.</p>
-    <h3>Art. 18: Rol Sexual</h3>
-    <p>Prohibido el rol sexual explícito. Las interacciones de pareja deben ser leves, privadas y siempre bajo consentimiento mutuo OOC.</p>
-    <h3>Art. 19: Discriminación</h3>
-    <p>Cualquier insulto racista, xenofóbico o discriminatorio fuera de rol conlleva la expulsión inmediata.</p>`
+    body: `<h3>Art. 19: Protección Total a Mujeres</h3>
+    <p><b>TOLERANCIA CERO:</b> Cualquier acoso sexual, comentarios obscenos o falta de respeto hacia las mujeres resulta en <b>BAN PERMANENTE</b>. Aquí se respeta a todo el mundo.</p>
+    <h3>Art. 20: Rol Sexual Prohibido</h3>
+    <p>Nada de roles sexuales explícitos. Si tienes pareja en el juego, manténlo discreto y siempre con consentimiento OOC mutuo. Pasarte de la raya te cuesta el baneo.</p>
+    <h3>Art. 21: Discriminación Cero</h3>
+    <p>Insultos racistas, comentarios xenófobos o discriminación de cualquier tipo están prohibidos. Esto no es negociable, si lo haces, sales del servidor.</p>`
   },
   {
     title: "PÁG. 9",
-    body: `<h3>Art. 20: Revenge Kill (RK)</h3>
-    <p>Si caes inconsciente y eres reanimado en el hospital, pierdes la memoria reciente. No puedes volver a la zona de tu muerte para vengarte.</p>
-    <h3>Art. 21: Combat Logging</h3>
-    <p>Prohibido desconectarse durante un rol en curso, persecución o enfrentamiento para evitar las consecuencias (multas o cárcel).</p>
-    <h3>Art. 22: Stream Sniping</h3>
-    <p>Usar transmisiones en vivo para localizar a otros jugadores o anticipar sus movimientos es una falta gravísima al Fair Play.</p>`
+    body: `<h3>Art. 22: Revenge Kill (RK)</h3>
+    <p>Si caes y te reviven, no puedes volver a buscar a los que te tumbaron. Perdiste la memoria del evento. Si te encuentras con ellos después, actúa como si no pasó nada.</p>
+    <h3>Art. 23: Combat Logging</h3>
+    <p>Desconectarte en medio de un rol, persecución o tiroteo pa' evitar consecuencias es de lo peor. Si lo haces, cuando vuelvas te caen las sanciones más el ban temporal.</p>
+    <h3>Art. 24: Stream Sniping</h3>
+    <p>Usar streams en vivo pa' ubicar gente o saber qué están haciendo es trampa. Si te agarran haciendo eso, ban permanente sin vuelta atrás.</p>`
   },
   {
     title: "PÁG. 10",
-    body: `<h3>Art. 23: Procedimientos Policiales</h3>
-    <p>Toda alcabala debe contar con al menos una patrulla y señalización (conos). Si el retén posee solo 2 policías, el rol será preventivo y no agresivo.</p>
-    <h3>Art. 24: Respeto a Servicios</h3>
-    <p>Médicos, mecánicos y bomberos en servicio son figuras protegidas. No se permite agredirlos sin un rol previo de extrema importancia autorizado.</p>
-    <h3>Art. 25: Robos Espontáneos</h3>
-    <p>Los robos a tiendas deben ser rápidos. La policía responderá según la magnitud del reporte ciudadano.</p>`
+    body: `<h3>Art. 25: Procedimientos Policiales</h3>
+    <p>Las alcabalas necesitan mínimo una patrulla y señalización (conos). Si solo hay 2 policías, el retén es preventivo, no pueden ponerse agresivos sin razón válida.</p>
+    <h3>Art. 26: Respeto a Servicios Públicos</h3>
+    <p>Médicos, mecánicos y bomberos en servicio no pueden ser agredidos sin un rol extremadamente importante autorizado. Ellos están trabajando, respétalos.</p>
+    <h3>Art. 27: Límites en Secuestros</h3>
+    <p>Un secuestro no puede durar más de 60 minutos. Después de ese tiempo, debes liberar al rehén o ejecutarlo si el rol lo amerita. Extender el tiempo indefinidamente está prohibido.</p>`
   },
   {
     title: "PÁG. 11",
-    body: `<h3>Art. 26: Rol de Entorno</h3>
-    <p>Debes actuar considerando que la ciudad tiene habitantes civiles. Después de un delito, usa <b>/entorno</b> para simular la llamada de testigos a la policía.</p>
-    <h3>Art. 27: Uso del /me y /do</h3>
-    <p>El <b>/me</b> es para acciones visibles y el <b>/do</b> para situaciones de ambiente o preguntas técnicas. Mentir por /do es motivo de baneo.</p>
-    <h3>Art. 28: Trolling / Griefing</h3>
-    <p>Entorpecer el rol de los demás sin sentido o "molestar" solo por diversión OOC será castigado.</p>`
+    body: `<h3>Art. 28: Uso del /entorno</h3>
+    <p>Después de cometer un delito público (robo, tiroteo, atropello), usa <b>/entorno</b> pa' simular que los civiles NPC llamaron a la policía. Esto mantiene el realismo del servidor.</p>
+    <div class="example">Ejemplo: Robas una tienda en plena calle, usas /entorno "Los transeúntes llamaron a la policía".</div>
+    <h3>Art. 29: Comandos /me y /do</h3>
+    <p>El /me es pa' acciones que haces (ej: /me saca una pistola). El /do es pa' describir el entorno o hacer preguntas (ej: /do ¿Se ve armado?). <b>Mentir en /do es banable.</b></p>
+    <h3>Art. 30: Trolling Prohibido</h3>
+    <p>Molestar a la gente sin razón, arruinar roles o hacer el payaso solo pa' joder está prohibido. Si estás aquí es pa' rolear, no pa' sabotear.</p>`
   },
   {
     title: "PÁG. 12",
-    body: `<h3>Art. 29: Corrupción de Funcionarios</h3>
-    <p>Los sobornos a policías son válidos siempre que se realicen bajo un rol lógico. Un policía no puede ser corrupto sin una historia previa que lo respalde.</p>
-    <h3>Art. 30: Estrellas de Búsqueda</h3>
-    <p>Los delitos acumulan estrellas. El ciudadano puede optar por entregarse pacíficamente para reducir su condena o intentar eludir la justicia.</p>`
+    body: `<h3>Art. 31: Corrupción Policial</h3>
+    <p>Los sobornos a policías son válidos solo si hay un rol lógico detrás. Un policía no puede ser corrupto de la nada, tiene que tener una historia previa que respalde eso.</p>
+    <h3>Art. 32: Sistema de Estrellas</h3>
+    <p>Los delitos acumulan estrellas de búsqueda. Puedes entregarte pa' reducir condena o tratar de escapar. Si te atrapan, aguantas las consecuencias completas.</p>
+    <h3>Art. 33: Cooldown entre Robos</h3>
+    <p>No puedes robar la misma tienda o hacer el mismo delito cada 5 minutos. Tiene que pasar mínimo 30 minutos entre robos grandes y 15 entre robos menores.</p>`
   },
   {
     title: "PÁG. 13",
-    body: `<h3>Art. 31: Normativa para Streamers</h3>
-    <p>Los creadores deben mantener una conducta ejemplar. No pueden incitar al odio contra otros usuarios ni revelar información administrativa en sus directos.</p>
-    <h3>Art. 32: Comportamiento de Staff</h3>
-    <p>El Staff debe actuar con imparcialidad. El abuso de comandos para beneficio propio resultará en la expulsión del equipo administrativo.</p>`
+    body: `<h3>Art. 34: Uso de Máscaras y Disfraces</h3>
+    <p>Si usas máscara completa, casco o pasamontañas, no pueden reconocerte por tu voz ni tus tatuajes. El disfraz te protege la identidad siempre y cuando cubras bien.</p>
+    <h3>Art. 35: Identificación Obligatoria</h3>
+    <p>Si un policía te pide la cédula en un control, tienes que dársela. Negarte sin razón válida es motivo de detención preventiva.</p>
+    <h3>Art. 36: Declaraciones en Comisaría</h3>
+    <p>Cuando te arrestan, tienes derecho a declarar o quedarte callado. Si hablas, lo que digas puede usarse en tu contra. Si callas, no pueden obligarte a confesar.</p>`
   },
   {
     title: "PÁG. 14",
-    body: `<h3>Art. 33: Faltas Graves</h3>
-    <p>Se consideran faltas graves el PG constante, RDM, VDM y el acoso. Conllevan baneo temporal de 3 a 10 días.</p>
-    <h3>Art. 34: Faltas Críticas</h3>
-    <p>Uso de programas externos (Cheats), Toxicidad extrema hacia la comunidad y evasión de sanciones con cuentas secundarias. <b>Sanción:</b> BAN PERMANENTE.</p>`
+    body: `<h3>Art. 37: Tiroteos en Zonas Públicas</h3>
+    <p>Evita los tiroteos en pleno centro o zonas muy transitadas sin un motivo fuerte. Si vas a hacer eso, hazlo en zonas rojas o lugares alejados pa' no arruinar el rol pasivo de otros.</p>
+    <h3>Art. 38: Robo de Vehículos de Emergencia</h3>
+    <p>Robar patrullas, ambulancias o camiones de bomberos está permitido solo con rol previo y mínimo 10 policías activos. No puedes agarrar una patrulla vacía y salir como si nada.</p>
+    <h3>Art. 39: Límites en Persecuciones</h3>
+    <p>Las persecuciones no pueden durar más de 20 minutos. Después de ese tiempo, si no te atrapan o logras escapar, termina el rol. No vale dar vueltas por horas.</p>`
   },
   {
     title: "PÁG. 15",
+    body: `<h3>Art. 40: Radiofrecuencias</h3>
+    <p>Las frecuencias policiales y de emergencias están protegidas. Solo puedes escucharlas si robaste una radio o tienes acceso legítimo. Usarlas sin razón es metagaming.</p>
+    <h3>Art. 41: Farming Excesivo</h3>
+    <p>Repetir trabajos legales como loco solo pa' farmear plata sin rolear está mal visto. Tienes que balancear el trabajo con el rol. No es un grinding simulator.</p>
+    <h3>Art. 42: Abuso de Mecánicas</h3>
+    <p>Explotar bugs, usar glitches o aprovecharte de mecánicas rotas del servidor está prohibido. Si encuentras un bug, repórtalo en lugar de abusarlo.</p>`
+  },
+  {
+    title: "PÁG. 16",
+    body: `<h3>Art. 43: Char Kill (CK)</h3>
+    <p>El Character Kill es la muerte permanente de tu personaje. Solo ocurre si tú aceptas que tu personaje muera definitivamente o si el admin lo autoriza por un rol extremo. No es algo común.</p>
+    <div class="example">Ejemplo: Si te dan 50 tiros y el admin aprueba el CK, pierdes ese personaje pa' siempre.</div>
+    <h3>Art. 44: Respeto al Rol Pasivo</h3>
+    <p>No todos quieren tiroteos y acción. Respeta a quienes roleen tranquilos vendiendo, trabajando o conversando. No arruines su experiencia sin motivo.</p>`
+  },
+  {
+    title: "PÁG. 17",
+    body: `<h3>Art. 45: Zonas Rojas</h3>
+    <p>Hay zonas marcadas como "calientes" donde el crimen es más común. Entrar ahí es bajo tu propio riesgo. La policía responde menos y las bandas tienen más control.</p>
+    <h3>Art. 46: Conducta de Streamers</h3>
+    <p>Los creadores de contenido tienen que dar el ejemplo. No pueden incitar odio, revelar información administrativa ni usar su alcance pa' atacar a otros usuarios.</p>
+    <h3>Art. 47: Imparcialidad del Staff</h3>
+    <p>El staff debe actuar con neutralidad. Si un admin abusa de comandos pa' beneficiarse o ayudar a sus panas, es expulsado del equipo inmediatamente.</p>`
+  },
+  {
+    title: "PÁG. 18",
+    body: `<h3>Art. 48: Faltas Leves</h3>
+    <p>Se consideran leves: fallas menores de rol, no usar /entorno ocasionalmente, pequeños errores de RP. <b>Sanción:</b> Advertencia verbal o kick.</p>
+    <h3>Art. 49: Faltas Graves</h3>
+    <p>PowerGaming constante, RDM (matar sin rol), VDM (atropellar sin sentido) y acoso moderado. <b>Sanción:</b> Ban temporal de 3 a 10 días.</p>
+    <h3>Art. 50: Faltas Críticas</h3>
+    <p>Uso de cheats, toxicidad extrema, evasión de ban con cuentas secundarias y metagaming repetitivo. <b>Sanción:</b> BAN PERMANENTE sin apelación.</p>`
+  },
+  {
+    title: "PÁG. 19",
+    body: `<h3>Art. 51: Sistema de Apelaciones</h3>
+    <p>Si crees que fuiste sancionado injustamente, puedes apelar en el Discord oficial. Tienes 7 días pa' hacerlo. Después de ese plazo, la sanción queda firme.</p>
+    <h3>Art. 52: Actualizaciones de Normativa</h3>
+    <p>Estas leyes se actualizan constantemente. Revisa el Discord y el foro oficial pa' estar al día. Los cambios entran en vigor inmediatamente al ser anunciados.</p>
+    <h3>Art. 53: Interpretación Final</h3>
+    <p>Cualquier situación no cubierta aquí será interpretada por el Consejo Administrativo bajo el criterio de realismo, lógica y respeto. Su decisión es inapelable.</p>`
+  },
+  {
+    title: "PÁG. 20",
     body: `<h3>Disposiciones Finales</h3>
-    <p>La interpretación de esta Ley y sus futuras actualizaciones corresponden únicamente al Consejo Administrativo de Caracas Night RP.</p>
-    <p style="text-align:center; font-weight:800; color:var(--accent); margin-top:50px;">ORDEN Y JUSTICIA.<br>CIUDAD DE CARACAS 2026</p>
-    <div style="text-align:center; font-size: 10px; opacity: 0.5;">Caracas Night RP - Todos los derechos reservados.</div>`
+    <p>Esta constitución busca garantizar que todos disfruten del servidor. El respeto mutuo, el realismo y la calidad del rol son los pilares de Caracas Night RP.</p>
+    <p style="margin-top:20px;"><b>Recuerda:</b> Estás aquí pa' pasarla bien y crear historias memorables. No arruines la experiencia de otros ni la tuya propia.</p>
+    <p style="text-align:center; font-weight:800; color:var(--accent); margin-top:50px;">ORDEN, RESPETO Y REALISMO.<br>CARACAS NIGHT RP 2026</p>
+    <div style="text-align:center; font-size: 10px; opacity: 0.5; margin-top: 20px;">Caracas Night RP - Todos los derechos reservados.<br>Versión 3.0 - Actualizada Febrero 2026</div>`
   }
 ];
 
@@ -262,6 +360,40 @@ function changePage(dir) {
 function updateIndicator() {
   indicator.innerText = `${currentPage + 1} / ${content.length}`;
 }
+
+// Click spark effect
+document.addEventListener('click', function(e) {
+  const colors = ['#007AFF', '#00bfff', '#0099ff', '#66b3ff'];
+  const sparkCount = 6;
+  
+  for (let i = 0; i < sparkCount; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'click-spark';
+    
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    spark.style.left = x + 'px';
+    spark.style.top = y + 'px';
+    spark.style.width = '6px';
+    spark.style.height = '6px';
+    spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+    spark.style.boxShadow = `0 0 10px ${colors[Math.floor(Math.random() * colors.length)]}`;
+    
+    const angle = (Math.PI * 2 * i) / sparkCount;
+    const velocity = 40;
+    const vx = Math.cos(angle) * velocity;
+    const vy = Math.sin(angle) * velocity;
+    
+    spark.style.transform = `translate(${vx}px, ${vy}px)`;
+    
+    document.body.appendChild(spark);
+    
+    setTimeout(() => {
+      spark.remove();
+    }, 600);
+  }
+});
 
 initBook();
 </script>

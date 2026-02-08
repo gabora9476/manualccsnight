@@ -2,246 +2,268 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ley Orgánica Procesal de Caracas — Caracas Night RP</title>
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=0" />
+<title>Constitución de la Ciudad de Caracas — Caracas Night RP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0b2545; --paper:#fbfbfb; --ink:#111827; --accent:#1e90ff;
-    --page-w:760px; --page-h:520px; --gutter:28px;
+  :root {
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --accent: #007AFF; 
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
   }
-  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(180deg,#07172b 0%, #0b2545 60%); color:var(--ink);}
-  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
-
-  /* book shell */
-  .book{
-    width:calc(var(--page-w) + var(--gutter)*2);
-    max-width:96vw;
-    perspective:1400px;
-    user-select:none;
-    touch-action:pan-y;
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: #020617;
+    background-image: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+    color: var(--text-main);
+    overflow: hidden;
   }
-
-  /* cover */
-  .cover{background:var(--bg);color:var(--paper);padding:28px;border-radius:10px;box-shadow:0 18px 40px rgba(2,6,23,0.6);display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .cover h1{margin:0;font-size:26px;letter-spacing:0.6px}
-  .cover h2{margin:8px 0 0;font-size:14px;font-weight:600;opacity:0.9}
-  .cover .meta{margin-top:14px;font-size:13px;opacity:0.85}
-  .cover .cta{margin-top:18px;padding:10px 18px;border-radius:999px;background:linear-gradient(90deg,var(--accent),#1976d2);color:white;font-weight:700;cursor:pointer}
-
-  /* book pages viewport */
-  .viewport{position:relative;margin-top:18px;height:var(--page-h);display:flex;align-items:center;justify-content:center}
-  .pages{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
-
-  /* page style */
-  .page{
-    width:var(--page-w);height:var(--page-h);background:var(--paper);box-shadow:0 12px 30px rgba(2,6,23,0.25);border-radius:6px;padding:34px;box-sizing:border-box;position:absolute;left:50%;transform:translateX(-50%);overflow:auto;
-    -webkit-overflow-scrolling:touch;
-    transition:transform 520ms cubic-bezier(.2,.9,.3,1),opacity 240ms ease, box-shadow 300ms ease;
+  .main-container { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
+  .book-shell { position: relative; width: 100%; max-width: 550px; height: 85vh; perspective: 2000px; }
+  
+  .page {
+    position: absolute; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid var(--glass-border); border-radius: 28px;
+    padding: 30px; display: flex; flex-direction: column;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+    overflow-y: auto; opacity: 0; transform: translateX(60px) rotateY(-20deg); pointer-events: none;
   }
-  .page .title{font-weight:800;font-size:18px;margin-bottom:8px}
-  .page h3{margin:12px 0 6px;font-size:14px}
-  .page p{font-size:13px;line-height:1.5;margin:6px 0}
-  .page .small{font-size:12px;color:#555}
+  
+  .page.active { opacity: 1; transform: translateX(0) rotateY(0); pointer-events: all; z-index: 10; }
+  .page.prev-page { opacity: 0; transform: translateX(-60px) rotateY(20deg); }
+  
+  h1 { font-weight: 800; font-size: 24px; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+  h2 { font-weight: 400; font-size: 13px; color: var(--text-dim); margin: 5px 0 15px 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; }
+  h3 { font-size: 14px; color: var(--accent); margin-top: 18px; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; margin-bottom: 8px; }
+  p { font-size: 12.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin-bottom: 10px; text-align: justify; }
+  b { color: #fff; font-weight: 700; }
+  .example { background: rgba(0,122,255,0.08); padding: 10px; border-radius: 8px; font-size: 11.5px; border-left: 3px solid var(--accent); margin: 8px 0; color: #e0e0e0; font-style: italic; }
 
-  /* stacking */
-  .page.prev{transform:translateX(calc(-160%)) scale(.98) rotateY(8deg);opacity:0.95}
-  .page.current{transform:translateX(-50%);z-index:30}
-  .page.next{transform:translateX(calc(40%)) scale(.98) rotateY(-8deg);opacity:0.95}
-  .page.hidden{opacity:0;transform:translateX(-50%) scale(.96) rotateY(0deg);pointer-events:none}
-
-  /* mobile tweaks */
-  @media(max-width:900px){:root{--page-w:92vw;--page-h:68vh}
-    .page{padding:20px}
+  .click-zone { position: absolute; top: 0; width: 30%; height: 100%; z-index: 25; cursor: pointer; }
+  .zone-left { left: 0; }
+  .zone-right { right: 0; }
+  
+  .nav-bar {
+    margin-top: 15px; display: flex; align-items: center; gap: 20px;
+    background: var(--glass); padding: 8px 25px; border-radius: 999px;
+    border: 1px solid var(--glass-border); backdrop-filter: blur(15px);
   }
+  .nav-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; transition: 0.3s; }
+  .nav-btn:hover { color: var(--accent); transform: scale(1.2); }
+  .page-num { font-size: 12px; font-weight: 800; letter-spacing: 2px; }
 
-  /* controls */
-  .controls{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px}
-  .btn{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--paper);padding:8px 12px;border-radius:8px;cursor:pointer}
-  .pageind{color:var(--paper);font-weight:600}
-
-  /* progress footer */
-  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:rgba(255,255,255,0.9);font-size:13px}
-
-  /* subtle page number inside */
-  .pagenum{position:fixed;right:18px;bottom:18px;color:rgba(255,255,255,0.12);font-weight:700;font-size:72px;pointer-events:none}
-
-  /* accessibility focus */
-  .btn:focus{outline:3px solid rgba(30,144,255,0.18)}
-
+  .btn-comandos {
+    position: fixed; top: 20px; right: 20px;
+    background: var(--accent); color: white; text-decoration: none;
+    padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 11px; z-index: 100;
+  }
+  
+  .page::-webkit-scrollbar { width: 4px; }
+  .page::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="book" role="application" aria-label="Libro: Ley Orgánica Procesal de Caracas">
 
-    <!-- front cover -->
-    <div class="cover" id="cover">
-      <h1>Ley Orgánica Procesal de Caracas</h1>
-      <h2>Caracas Night RP — Versión Oficial</h2>
-      <div class="meta">Documento normativo oficial del servidor.</div>
-      <div class="cta" id="openBtn">Abrir libro →</div>
-    </div>
+<a href="index.html" class="btn-comandos">⚙️ COMANDOS</a>
 
-    <!-- viewport for pages -->
-    <div class="viewport" id="viewport" style="display:none;flex-direction:column;align-items:center">
-      <div class="pages" id="pages"></div>
-      <div class="footer" style="width:calc(var(--page-w) + var(--gutter)*2);max-width:96vw">
-        <div class="controls">
-          <button class="btn" id="prevBtn" aria-label="Página anterior">◀ Anterior</button>
-          <div class="pageind" id="pageIndicator">1 / 1</div>
-          <button class="btn" id="nextBtn" aria-label="Página siguiente">Siguiente ▶</button>
-        </div>
-        <div style="font-size:13px">Desliza o toca los bordes para pasar página</div>
-      </div>
-      <div class="pagenum" id="pagenum"></div>
-    </div>
+<div class="main-container">
+  <div class="book-shell" id="book">
+    <div class="click-zone zone-left" onclick="changePage(-1)"></div>
+    <div class="click-zone zone-right" onclick="changePage(1)"></div>
+    <div id="pages-container"></div>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-btn" onclick="changePage(-1)">◀</button>
+    <div class="page-num" id="page-indicator">1 / 15</div>
+    <button class="nav-btn" onclick="changePage(1)">▶</button>
   </div>
 </div>
 
 <script>
-/*
-  Book viewer — single file.
-  - Creates pages from `contentPages` array.
-  - Supports click on controls, touch swipe, and keyboard arrows.
-  - Smooth transitions and responsive layout.
-*/
-
-const contentPages = [
-`<div class="title">Preámbulo</div>
-<p>La Ciudad de Caracas, en uso de sus competencias soberanas y bajo el principio del orden y la convivencia digital, decreta la presente <strong>Ley Orgánica Procesal de Caracas</strong>, destinada a regir la vida civil, policial, judicial y criminal dentro del territorio virtual de <em>Caracas Night RP</em>, garantizando el equilibrio, el respeto y la coherencia del roleplay venezolano.</p>`,
-`<div class="title">TÍTULO I — Disposiciones Fundamentales</div>
-<p><strong>Art. 1.º — Objeto.</strong><br>Regular la conducta de los ciudadanos dentro del territorio de Caracas, estableciendo derechos, deberes, sanciones y procedimientos que aseguren una experiencia de roleplay realista y justa.</p>
-<p><strong>Art. 2.º — Ámbito de Aplicación.</strong><br>Esta Ley será de cumplimiento obligatorio para toda persona que participe en el servidor <em>Caracas Night RP</em>, sin excepción de cargo, facción o nivel.</p>
-<p><strong>Art. 3.º — Principios Rectores.</strong><br>Toda conducta deberá regirse por los principios de Realismo, Respeto, Equidad y Lógica.</p>`,
-`<div class="title">TÍTULO II — Derechos y Deberes Ciudadanos</div>
-<p><strong>Art. 10.º — Derechos del Ciudadano.</strong><br>Todo ciudadano tiene derecho a: recibir trato digno, no ser objeto de acoso, recibir protección como jugador nuevo hasta nivel 3, desarrollar su personaje y denunciar abusos.</p>
-<p><strong>Art. 11.º — Deberes del Ciudadano.</strong><br>Actuar con coherencia IC, evitar OOC, obedecer órdenes válidas y respetar normas.</p>`,
-`<div class="title">TÍTULO III — Protección a Nuevos Jugadores</div>
-<p><strong>Art. 20.º — Nivel de Protección.</strong><br>Todo jugador con <strong>nivel inferior a 3</strong> será considerado ciudadano en formación y gozará de inmunidad contra roles violentos o agresivos (robos, secuestros, asesinatos, extorsión o amenazas).</p>
-<p><strong>Art. 21.º — Sanción por Violentar a Novatos.</strong><br>Toda persona que ejecute acciones violentas contra ciudadanos de nivel inferior a 3 será sancionada; su rol será nulo por invalidez procesal.</p>
-<p><strong>Art. 22.º — Restricción de Actos Delictivos.</strong><br>Los jugadores nivel &lt; 3 tampoco podrán ejecutar robos ni delitos graves.</p>`,
-`<div class="title">TÍTULO IV — Condiciones para Roles Agresivos</div>
-<p><strong>Art. 30.º — Equilibrio de Fuerzas.</strong><br>a) Con 2 policías activos, solo podrán participar 2 civiles en roles agresivos.<br>b) Si no hay policías activos, se suspende cualquier rol violento.</p>
-<p><strong>Art. 31.º — Requisitos Mínimos.</strong><br>Para ejecutar roles agresivos complejos deberán existir mínimo 4 policías y 4 antisociales activos.</p>
-<p><strong>Art. 32.º — Actos de Alta Gravedad.</strong><br>Robos de patrullas, secuestros de funcionarios o atentados públicos solo serán válidos con al menos 20 funcionarios policiales activos.</p>
-<p><strong>Art. 33.º — Robos Espontáneos.</strong><br>Los robos a tiendas serán de ejecución inmediata y no planificada; deberán responder al menos 4 policías según la magnitud.</p>`,
-`<div class="title">TÍTULO V — Normas Generales del Roleplay</div>
-<p><strong>Art. 40.º — Metagaming (MG).</strong><br>Queda prohibido usar información obtenida fuera de rol para actuar dentro del juego.</p>
-<p><strong>Art. 41.º — Powergaming (PG).</strong><br>Prohibido ejecutar acciones imposibles o abusivas que excedan capacidades humanas o del entorno.</p>
-<p><strong>Art. 42.º — Random Deathmatch (RDM).</strong><br>Prohibido atacar o matar sin motivo RP válido.</p>
-<p><strong>Art. 43.º — Vehicle Deathmatch (VDM).</strong><br>Prohibido usar vehículos como armas sin justificación RP.</p>
-<p><strong>Art. 44.º — Combat Logging.</strong><br>Prohibido desconectarse durante un rol en curso, persecución o enfrentamiento.</p>
-<p><strong>Art. 45.º — FearRP.</strong><br>Todo ciudadano debe reaccionar con miedo y lógica ante situaciones de peligro.</p>
-<p><strong>Art. 46.º — Value of Life.</strong><br>Se deberá valorar la vida del personaje; no se permite actuar de forma suicida o absurda.</p>
-<p><strong>Art. 47.º — Stream Sniping.</strong><br>Usar transmisiones en vivo para obtener ventajas queda prohibido.</p>
-<p><strong>Art. 48.º — Acoso o Simpeo.</strong><br>Cualquier insinuación o acoso sexual no consentido, especialmente hacia mujeres, será acoso grave y sancionado con expulsión.</p>
-<p><strong>Art. 49.º — Rol Sexual.</strong><br>Prohibido rol sexual explícito; interacciones amorosas deben ser leves y consentidas.</p>
-<p><strong>Art. 50.º — Discriminación.</strong><br>Racismo o discriminación será sancionado directamente.</p>
-<p><strong>Art. 51.º — Trolling o Griefing.</strong><br>Prohibido entorpecer roles ajenos intencionalmente.</p>
-<p><strong>Art. 52.º — Rol de Servicios.</strong><br>Roles de mecánicos, médicos, bomberos y taxistas deben realizarse con respeto; no se permite agredirlos salvo rol lógico autorizado.</p>`,
-`<div class="title">TÍTULO VI — Armas y Enfrentamientos</div>
-<p><strong>Art. 60.º — Uso Urbano.</strong><br>Armas medias o largas prohibidas en roles urbanos leves.</p>
-<p><strong>Art. 61.º — Uso Autorizado.</strong><br>Permitido fuera de la ciudad o en enfrentamientos de gran escala (mínimo 8 por banda).</p>
-<p><strong>Art. 62.º — Armamento Mafioso.</strong><br>Mafias podrán portar armas largas dentro de sus bases como respaldo estético; no pueden disparar fuera del área segura.</p>
-<p><strong>Art. 63.º — Disparos sin Visual.</strong><br>Disparar sin visión real invalida el disparo; uso abusivo de cámara será sancionado.</p>`,
-`<div class="title">TÍTULO VII — Procedimientos Policiales y Retenes</div>
-<p><strong>Art. 70.º — Alcabalas y Requisitos.</strong><br>Toda alcabala debe tener al menos una patrulla (no moto) y conos de advertencia visibles.</p>
-<p><strong>Art. 71.º — Rol No Agresivo.</strong><br>Si el retén posee solo 2 policías, el rol será no agresivo y los civiles deben detenerse.</p>
-<p><strong>Art. 72.º — Respeto a la Autoridad.</strong><br>Negarse a un retén sin rol previo o huir sin motivo RP se considera falta grave.</p>`,
-`<div class="title">TÍTULO VIII — Estrellas de Búsqueda y Corrupción</div>
-<p><strong>Art. 80.º — Sistema de Búsqueda.</strong><br>Los delitos graves añadirán estrellas de búsqueda; podrán eliminarse entregándose o sobornando a un policía mediante rol lógico.</p>`,
-`<div class="title">TÍTULO IX — Roles Especiales y Públicos</div>
-<p><strong>Art. 90.º — Funcionarios Protegidos.</strong><br>Prohibido robar, secuestrar o matar a funcionarios públicos uniformados o servicios esenciales salvo rol lógico autorizado.</p>
-<p><strong>Art. 91.º — Roles de Gobierno.</strong><br>Cargos de Gobernador, Alcalde o Comandante deben mantener conducta ejemplar y no abusar de poder.</p>`,
-`<div class="title">TÍTULO X — Sanciones y Competencia Administrativa</div>
-<p><strong>Art. 100.º — Faltas Leves.</strong><br>Infracciones menores (MG leve, insultos, OOC) conllevan advertencia o suspensión temporal.</p>
-<p><strong>Art. 101.º — Faltas Graves.</strong><br>PG, RDM, VDM, acoso o abuso de rol se sancionan con suspensión prolongada o expulsión permanente.</p>
-<p><strong>Art. 102.º — Reincidencia.</strong><br>La reiteración de faltas eleva la sanción automáticamente.</p>
-<p><strong>Art. 103.º — Autoridad Administrativa.</strong><br>Jueces, fiscales o moderadores son la autoridad legítima para aplicar sanciones según esta Ley.</p>`,
-`<div class="title">TÍTULO XI — Disposiciones Finales</div>
-<p><strong>Art. 110.º — Interpretación.</strong><br>La interpretación y actualización de esta Ley corresponde al Consejo Administrativo de Caracas Night RP.</p>
-<p><strong>Art. 111.º — Vigencia.</strong><br>La presente Ley entra en vigor al ser publicada oficialmente en los canales de comunicación del servidor.</p>
-<p><strong>Art. 112.º — Principio de Soberanía Digital.</strong><br>El servidor se reserva el derecho de modificar artículos conforme al desarrollo del ecosistema de roleplay.</p>
-`
+const content = [
+  {
+    title: "PORTADA",
+    body: `<div style="text-align:center; padding-top:20px;">
+      <h1>CIUDAD DE CARACAS</h1>
+      <h2>Ley Orgánica Procesal — Caracas Night RP</h2>
+      <div style="font-size: 50px; margin: 15px 0;">🏛️</div>
+      <p style="text-align:center; font-size: 14px;"><b>EDICIÓN SUPREMA 2026</b></p>
+      <p>Bienvenido al marco jurídico oficial. Este documento regula la vida civil y criminal del servidor.</p>
+      <p><b>Soberanía:</b> La administración se reserva el derecho de admisión bajo el criterio de calidad de rol.</p>
+      <div style="margin-top:20px; border: 1px solid var(--accent); padding:12px; border-radius:15px; background: rgba(0,122,255,0.05)">
+        <p style="font-size:11px; text-align:center; margin:0; color: #ffeb3b; font-weight: 800;">
+          AVISO: El desconocimiento de estas leyes no exime al ciudadano de su responsabilidad penal o administrativa.
+        </p>
+      </div>
+      <p style="font-size:10px; opacity:0.6; margin-top:15px;">CONSTITUCIÓN DESTINADA A REGIR EL TERRITORIO VIRTUAL BAJO EL PRINCIPIO DE ORDEN Y LÓGICA.</p>
+    </div>`
+  },
+  {
+    title: "PÁG. 2",
+    body: `<h3>Art. 1: Preámbulo y Objeto</h3>
+    <p>La presente Ley tiene como fin regular la conducta de los ciudadanos dentro del territorio de Caracas, garantizando el equilibrio, el respeto y la coherencia del roleplay venezolano.</p>
+    <h3>Art. 2: Ámbito de Aplicación</h3>
+    <p>Esta Ley es de cumplimiento <b>obligatorio</b> para toda persona, sin excepción de cargo, facción o nivel. Se rige por los principios de Realismo y Equidad.</p>
+    <h3>Art. 3: Derechos del Ciudadano</h3>
+    <p>Todo ciudadano tiene derecho a un trato digno, al desarrollo de su personaje y a denunciar abusos mediante los canales oficiales.</p>`
+  },
+  {
+    title: "PÁG. 3",
+    body: `<h3>Art. 4: Protección a Novatos (Nivel < 3)</h3>
+    <p>Todo jugador con <b>nivel inferior a 3</b> será considerado ciudadano en formación y gozará de inmunidad contra roles agresivos.</p>
+    <div class="example">Está prohibido robar, secuestrar, asesinar, extorsionar o amenazar a un nivel menor a 3.</div>
+    <h3>Art. 5: Sanción por Violentar a Novatos</h3>
+    <p>Toda persona que ejecute acciones violentas contra ciudadanos nivel < 3 será sancionada y el rol será anulado de inmediato.</p>
+    <h3>Art. 6: Restricción de Novatos</h3>
+    <p>Los jugadores nivel < 3 tampoco podrán ejecutar robos ni delitos graves aprovechando su inmunidad.</p>`
+  },
+  {
+    title: "PÁG. 4",
+    body: `<h3>Art. 7: Equilibrio de Fuerzas</h3>
+    <p><b>A) Proporcionalidad:</b> Con 2 policías activos, solo podrán participar 2 civiles en roles agresivos.<br>
+    <b>B) Suspensión:</b> Si no hay policías activos en la ciudad, se suspende automáticamente cualquier rol violento.</p>
+    <h3>Art. 8: Requisitos Mínimos</h3>
+    <p>Para ejecutar roles agresivos complejos (asaltos a bancos grandes o sedes) deberán existir mínimo 4 policías y 4 antisociales activos.</p>
+    <h3>Art. 9: Actos de Alta Gravedad</h3>
+    <p>Robos de patrullas, secuestros de funcionarios o atentados públicos solo serán válidos con al menos <b>20 funcionarios policiales activos</b>.</p>`
+  },
+  {
+    title: "PÁG. 5",
+    body: `<h3>Art. 10: Metagaming (MG)</h3>
+    <p>Queda prohibido usar información obtenida fuera de rol (Discord, WhatsApp, Streams o ver la ID) para actuar dentro del juego.</p>
+    <div class="example">Reconocer a un enmascarado por su voz si nunca has escuchado su voz antes de forma oficial es MetaGaming.</div>
+    <h3>Art. 11: Powergaming (PG)</h3>
+    <p>Prohibido ejecutar acciones imposibles que excedan las capacidades humanas o del entorno del juego.</p>
+    <h3>Art. 12: Valor de Vida (FearRP)</h3>
+    <p>Todo ciudadano debe reaccionar con miedo y lógica. Si estás desarmado y te apuntan, tu única opción es obedecer.</p>`
+  },
+  {
+    title: "PÁG. 6",
+    body: `<h3>Art. 13: Penalizaciones Vehiculares</h3>
+    <p>En Caracas Night, el realismo automotriz es ley. Está <b>totalmente prohibido</b> subir cerros, colinas o lugares montañosos con vehículos que no sean Off-Road (4x4, Motos de Trail, etc).</p>
+    <div class="example"><b>Sanción:</b> Uso de vehículo inadecuado. Conducir un deportivo por el Ávila resultará en incautación y multa grave.</div>
+    <h3>Art. 14: Rol de Heridas</h3>
+    <p>Tras un impacto o caída, es obligatorio rolear el estado físico mediante /me antes de continuar cualquier acción.</p>`
+  },
+  {
+    title: "PÁG. 7",
+    body: `<h3>Art. 15: Combate y Ghost Peeking</h3>
+    <p>Disparar sin visual real invalida el rol. El uso abusivo de la cámara en 3ra persona para disparar desde coberturas totales es sancionable.</p>
+    <div class="example">Debes exponer al menos la mitad del torso o la cabeza para que el intercambio de disparos sea legal y justo.</div>
+    <h3>Art. 16: Armas Largas</h3>
+    <p>Prohibidas en roles urbanos leves o zonas residenciales. Su uso está reservado para conflictos de bandas en zonas rojas o enfrentamientos de gran escala.</p>`
+  },
+  {
+    title: "PÁG. 8",
+    body: `<h3>Art. 17: Protección de Género</h3>
+    <p><b>TOLERANCIA CERO:</b> El acoso sexual, comentarios lascivos no consentidos o la misoginia hacia las mujeres resultará en <b>BAN PERMANENTE</b>.</p>
+    <h3>Art. 18: Rol Sexual</h3>
+    <p>Prohibido el rol sexual explícito. Las interacciones de pareja deben ser leves, privadas y siempre bajo consentimiento mutuo OOC.</p>
+    <h3>Art. 19: Discriminación</h3>
+    <p>Cualquier insulto racista, xenofóbico o discriminatorio fuera de rol conlleva la expulsión inmediata.</p>`
+  },
+  {
+    title: "PÁG. 9",
+    body: `<h3>Art. 20: Revenge Kill (RK)</h3>
+    <p>Si caes inconsciente y eres reanimado en el hospital, pierdes la memoria reciente. No puedes volver a la zona de tu muerte para vengarte.</p>
+    <h3>Art. 21: Combat Logging</h3>
+    <p>Prohibido desconectarse durante un rol en curso, persecución o enfrentamiento para evitar las consecuencias (multas o cárcel).</p>
+    <h3>Art. 22: Stream Sniping</h3>
+    <p>Usar transmisiones en vivo para localizar a otros jugadores o anticipar sus movimientos es una falta gravísima al Fair Play.</p>`
+  },
+  {
+    title: "PÁG. 10",
+    body: `<h3>Art. 23: Procedimientos Policiales</h3>
+    <p>Toda alcabala debe contar con al menos una patrulla y señalización (conos). Si el retén posee solo 2 policías, el rol será preventivo y no agresivo.</p>
+    <h3>Art. 24: Respeto a Servicios</h3>
+    <p>Médicos, mecánicos y bomberos en servicio son figuras protegidas. No se permite agredirlos sin un rol previo de extrema importancia autorizado.</p>
+    <h3>Art. 25: Robos Espontáneos</h3>
+    <p>Los robos a tiendas deben ser rápidos. La policía responderá según la magnitud del reporte ciudadano.</p>`
+  },
+  {
+    title: "PÁG. 11",
+    body: `<h3>Art. 26: Rol de Entorno</h3>
+    <p>Debes actuar considerando que la ciudad tiene habitantes civiles. Después de un delito, usa <b>/entorno</b> para simular la llamada de testigos a la policía.</p>
+    <h3>Art. 27: Uso del /me y /do</h3>
+    <p>El <b>/me</b> es para acciones visibles y el <b>/do</b> para situaciones de ambiente o preguntas técnicas. Mentir por /do es motivo de baneo.</p>
+    <h3>Art. 28: Trolling / Griefing</h3>
+    <p>Entorpecer el rol de los demás sin sentido o "molestar" solo por diversión OOC será castigado.</p>`
+  },
+  {
+    title: "PÁG. 12",
+    body: `<h3>Art. 29: Corrupción de Funcionarios</h3>
+    <p>Los sobornos a policías son válidos siempre que se realicen bajo un rol lógico. Un policía no puede ser corrupto sin una historia previa que lo respalde.</p>
+    <h3>Art. 30: Estrellas de Búsqueda</h3>
+    <p>Los delitos acumulan estrellas. El ciudadano puede optar por entregarse pacíficamente para reducir su condena o intentar eludir la justicia.</p>`
+  },
+  {
+    title: "PÁG. 13",
+    body: `<h3>Art. 31: Normativa para Streamers</h3>
+    <p>Los creadores deben mantener una conducta ejemplar. No pueden incitar al odio contra otros usuarios ni revelar información administrativa en sus directos.</p>
+    <h3>Art. 32: Comportamiento de Staff</h3>
+    <p>El Staff debe actuar con imparcialidad. El abuso de comandos para beneficio propio resultará en la expulsión del equipo administrativo.</p>`
+  },
+  {
+    title: "PÁG. 14",
+    body: `<h3>Art. 33: Faltas Graves</h3>
+    <p>Se consideran faltas graves el PG constante, RDM, VDM y el acoso. Conllevan baneo temporal de 3 a 10 días.</p>
+    <h3>Art. 34: Faltas Críticas</h3>
+    <p>Uso de programas externos (Cheats), Toxicidad extrema hacia la comunidad y evasión de sanciones con cuentas secundarias. <b>Sanción:</b> BAN PERMANENTE.</p>`
+  },
+  {
+    title: "PÁG. 15",
+    body: `<h3>Disposiciones Finales</h3>
+    <p>La interpretación de esta Ley y sus futuras actualizaciones corresponden únicamente al Consejo Administrativo de Caracas Night RP.</p>
+    <p style="text-align:center; font-weight:800; color:var(--accent); margin-top:50px;">ORDEN Y JUSTICIA.<br>CIUDAD DE CARACAS 2026</p>
+    <div style="text-align:center; font-size: 10px; opacity: 0.5;">Caracas Night RP - Todos los derechos reservados.</div>`
+  }
 ];
 
-// build pages
-const pagesEl = document.getElementById('pages');
-let pageEls = [];
-contentPages.forEach((html, idx)=>{
-  const div = document.createElement('article');
-  div.className = 'page hidden';
-  div.setAttribute('aria-label', `Página ${idx+1}`);
-  div.innerHTML = html + `<div style="margin-top:18px;font-size:12px;color:#444">Artículo y Secciones — Caracas Night RP · Página ${idx+1}</div>`;
-  pagesEl.appendChild(div);
-  pageEls.push(div);
-});
+let currentPage = 0;
+const container = document.getElementById('pages-container');
+const indicator = document.getElementById('page-indicator');
 
-let current = 0;
-function showPage(i){
-  if(i<0) i=0; if(i>pageEls.length-1) i=pageEls.length-1;
-  current = i;
-  pageEls.forEach((p, idx)=>{
-    p.classList.remove('prev','current','next','hidden');
-    if(idx < current-0){
-      // previous pages
-      if(idx === current-1) p.classList.add('prev'); else p.classList.add('hidden');
-    }
-    if(idx === current) p.classList.add('current');
-    if(idx > current){
-      if(idx === current+1) p.classList.add('next'); else p.classList.add('hidden');
-    }
+function initBook() {
+  content.forEach((data, index) => {
+    const pageDiv = document.createElement('div');
+    pageDiv.className = `page ${index === 0 ? 'active' : ''}`;
+    pageDiv.innerHTML = `
+      <div style="font-size:10px; color:var(--accent); font-weight:700; margin-bottom:10px">${data.title}</div>
+      ${data.body}
+      <div style="margin-top:auto; font-size:9px; color:var(--text-dim); text-align:right">CIUDAD DE CARACAS — NIGHT RP</div>
+    `;
+    container.appendChild(pageDiv);
   });
-  updateFooter();
+  updateIndicator();
 }
 
-function updateFooter(){
-  document.getElementById('pageIndicator').textContent = `${current+1} / ${pageEls.length}`;
-  document.getElementById('pagenum').textContent = `${current+1}`;
+function changePage(dir) {
+  const pages = document.querySelectorAll('.page');
+  const next = currentPage + dir;
+  if (next >= 0 && next < pages.length) {
+    pages[currentPage].classList.remove('active');
+    if (dir > 0) pages[currentPage].classList.add('prev-page');
+    else pages[currentPage].classList.remove('prev-page');
+    currentPage = next;
+    pages[currentPage].classList.remove('prev-page');
+    pages[currentPage].classList.add('active');
+    updateIndicator();
+  }
 }
 
-// initial state
-const cover = document.getElementById('cover');
-const viewport = document.getElementById('viewport');
-const openBtn = document.getElementById('openBtn');
-openBtn.addEventListener('click', ()=>{ cover.style.display='none'; viewport.style.display='flex'; showPage(0); });
+function updateIndicator() {
+  indicator.innerText = `${currentPage + 1} / ${content.length}`;
+}
 
-// controls
-document.getElementById('prevBtn').addEventListener('click', ()=> showPage(current-1));
-document.getElementById('nextBtn').addEventListener('click', ()=> showPage(current+1));
-
-// keyboard
-window.addEventListener('keydown', (e)=>{
-  if(viewport.style.display === 'none') return;
-  if(e.key === 'ArrowLeft') showPage(current-1);
-  if(e.key === 'ArrowRight') showPage(current+1);
-});
-
-// click on left/right page areas
-pagesEl.addEventListener('click',(e)=>{
-  const w = pagesEl.getBoundingClientRect().width;
-  const x = e.clientX - pagesEl.getBoundingClientRect().left;
-  if(x < w*0.38) showPage(current-1); else if(x > w*0.62) showPage(current+1);
-});
-
-// touch gestures
-let touchStartX = null;
-pagesEl.addEventListener('touchstart',(e)=>{ touchStartX = e.changedTouches[0].clientX; },{passive:true});
-pagesEl.addEventListener('touchend',(e)=>{
-  if(touchStartX === null) return;
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const threshold = 40; // px
-  if(dx > threshold) showPage(current-1);
-  else if(dx < -threshold) showPage(current+1);
-  touchStartX = null;
-},{passive:true});
-
-// accessibility: allow swipe edges on mobile by listening touchmove to avoid scrolling interfering
-
-// expose jump function for external use
-window.book = { goto: showPage, total: contentPages.length };
-
+initBook();
 </script>
-<a href="comandos.html" class="btn" style="position:fixed;top:20px;right:20px;background:#1e90ff;color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none;font-weight:600;z-index:99">Ver Comandos ⚙️</a>
 </body>
 </html>
